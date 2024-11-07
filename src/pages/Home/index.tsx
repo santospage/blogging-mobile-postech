@@ -2,7 +2,6 @@ import React from 'react';
 import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
-//import {RootStackParamList} from '../types';
 import BasePage from '../BasePage';
 
 export type RootStackParamList = {
@@ -27,7 +26,12 @@ export default function Home({navigation}: Props) {
             style={styles.imagem}
           />
           <Text style={[styles.text, styles.title]}>Welcome!</Text>
-          <Text style={styles.text}>Dynamic Blogging Classes</Text>
+          <Text style={[styles.text, styles.subtitle]}>
+            Dynamic Blogging Classes
+          </Text>
+          <Text style={styles.text}>
+            The perfect space to learn, share, and clarify your doubts.
+          </Text>
 
           <TouchableOpacity
             style={styles.button}
@@ -53,6 +57,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     alignItems: 'center',
     padding: 16,
+    paddingTop: 250,
   },
   imagem: {
     width: 100,
@@ -65,17 +70,21 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  subtitle: {
+    fontSize: 20,
     fontWeight: 'bold',
   },
   button: {
-    backgroundColor: '#6200EE',
+    backgroundColor: '#3299cc',
     padding: 12,
     borderRadius: 8,
     marginTop: 12,
   },
   textoBotao: {
-    color: 'white',
+    color: 'black',
     fontSize: 16,
     textAlign: 'center',
   },
