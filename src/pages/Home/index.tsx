@@ -1,7 +1,8 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {Image, Text, View, TouchableOpacity} from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
+import {styles} from './styles';
 import BasePage from '../BasePage';
 
 export type RootStackParamList = {
@@ -49,43 +50,3 @@ export default function Home({navigation}: Props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  contentContainer: {
-    alignItems: 'center',
-    padding: 16,
-    paddingTop: 250,
-  },
-  imagem: {
-    width: 100,
-    height: 100,
-    marginVertical: 16,
-  },
-  text: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  button: {
-    backgroundColor: '#3299cc',
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 12,
-  },
-  textoBotao: {
-    color: 'black',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-});
