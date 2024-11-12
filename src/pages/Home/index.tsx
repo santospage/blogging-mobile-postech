@@ -1,14 +1,15 @@
 import React from 'react';
-import {Image, Text, View, TouchableOpacity} from 'react-native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import { Image, Text, View, TouchableOpacity } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-import {styles} from './styles';
+import { styles } from './styles';
 import BasePage from '../BasePage';
 
 export type RootStackParamList = {
   Home: undefined;
   Login: undefined;
   Cadastro: undefined;
+  Drawer: undefined;
 };
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
@@ -17,7 +18,7 @@ type Props = {
   navigation: HomeScreenNavigationProp;
 };
 
-export default function Home({navigation}: Props) {
+export default function Home({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <BasePage>
@@ -36,13 +37,15 @@ export default function Home({navigation}: Props) {
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate('Login')}>
+            onPress={() => navigation.navigate('Login')}
+          >
             <Text style={styles.textoBotao}>Login</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate('Cadastro')}>
+            onPress={() => navigation.navigate('Drawer')}
+          >
             <Text style={styles.textoBotao}>Classes</Text>
           </TouchableOpacity>
         </View>

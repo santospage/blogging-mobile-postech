@@ -1,45 +1,49 @@
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import Home from '../pages/Home';
 import Login from '../pages/Login';
-import ListaPets from '../pages/ListaPets';
-import Mensagem from '../pages/Mensagem';
-import Sobre from '../pages/Sobre';
+import Classes from '../pages/Classes';
 import Perfil from '../pages/Perfil';
+import ClassRoom from '../pages/ClassRoom';
+import * as styles from '../routes/styles';
 
 const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
 function DrawerRoutes() {
   return (
     <Drawer.Navigator
       screenOptions={{
-        drawerStyle: {
-          backgroundColor: '#36D6AD',
-        },
+        ...styles.drawerStyles,
         drawerLabelStyle: {
-          color: '#fff',
-          fontSize: 14,
-          fontFamily: 'Roboto',
-          fontWeight: '400',
-          lineHeight: 20,
+          ...styles.drawerStyles.drawerLabelStyle,
+          fontWeight: 'bold',
         },
       }}
     >
       <Drawer.Screen
-        name="ListadePets"
-        component={TabRoutes}
+        name="ListofClasses"
+        component={Classes}
         options={{
-          drawerLabel: 'Pets para adoção',
+          drawerLabel: 'List of Classes',
+          headerTransparent: true,
+          title: '',
+          drawerItemStyle: { display: 'none' },
+        }}
+      />
+      <Drawer.Screen
+        name="Users"
+        component={Perfil}
+        options={{
+          drawerLabel: 'Users',
           drawerIcon: () => (
             <Image
-              source={require('../../assets/pets.png')}
-              style={{ width: 24, height: 24 }}
+              source={require('../../assets/users.png')}
+              style={styles.customStyles.icon}
             />
           ),
           headerTransparent: true,
@@ -47,48 +51,36 @@ function DrawerRoutes() {
         }}
       />
       <Drawer.Screen
-        name="Perfil"
+        name="Categories"
         component={Perfil}
         options={{
-          drawerLabel: 'Perfil',
+          drawerLabel: 'Categories',
+          drawerIcon: () => (
+            <Image
+              source={require('../../assets/categories.png')}
+              style={styles.customStyles.icon}
+            />
+          ),
           headerTransparent: true,
           title: '',
         }}
       />
       <Drawer.Screen
-        name="Sair"
-        component={Home}
+        name="Classes"
+        component={Perfil}
         options={{
-          drawerLabel: 'Sair',
+          drawerLabel: 'Classes',
+          drawerIcon: () => (
+            <Image
+              source={require('../../assets/classes.png')}
+              style={styles.customStyles.icon}
+            />
+          ),
           headerTransparent: true,
           title: '',
         }}
       />
     </Drawer.Navigator>
-  );
-}
-
-function TabRoutes() {
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Tab.Screen
-        name="ListaPetsTab"
-        component={ListaPets}
-        options={{
-          tabBarIcon: () => (
-            <Image
-              source={require('../../assets/pets-green.png')}
-              style={{ width: 24, height: 24 }}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen name="Mensagens" component={Mensagem} />
-    </Tab.Navigator>
   );
 }
 
@@ -106,8 +98,7 @@ export default function Navigation(): JSX.Element {
           options={{ title: 'Login' }}
         />
         <Stack.Screen name="Drawer" component={DrawerRoutes} />
-        <Stack.Screen name="Sobre" component={Sobre} />
-        <Stack.Screen name="Mensagem" component={Mensagem} />
+        <Stack.Screen name="ClassRoom" component={ClassRoom} />
       </Stack.Navigator>
     </NavigationContainer>
   );
