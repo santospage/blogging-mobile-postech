@@ -1,5 +1,7 @@
 import React, {ReactNode} from 'react';
-import {ImageBackground, StyleSheet, View} from 'react-native';
+import {ImageBackground, View} from 'react-native';
+
+import {styles} from './styles';
 
 type PaginaBaseProps = {
   children: ReactNode;
@@ -20,13 +22,3 @@ export default function PaginaBase({children}: PaginaBaseProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#d9d9f3',
-  },
-  backgroundImage: {
-    height: '100%',
-  },
-});
