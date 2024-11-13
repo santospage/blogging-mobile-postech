@@ -7,8 +7,10 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Classes from '../pages/Classes';
-import Perfil from '../pages/Perfil';
+import User from '../pages/User';
 import ClassRoom from '../pages/ClassRoom';
+import Categorie from '../pages/Categorie';
+import List from '../pages/ClassRoom/List';
 import * as styles from '../routes/styles';
 
 const Stack = createStackNavigator();
@@ -37,7 +39,7 @@ function DrawerRoutes() {
       />
       <Drawer.Screen
         name="Users"
-        component={Perfil}
+        component={User}
         options={{
           drawerLabel: 'Users',
           drawerIcon: () => (
@@ -52,7 +54,7 @@ function DrawerRoutes() {
       />
       <Drawer.Screen
         name="Categories"
-        component={Perfil}
+        component={Categorie}
         options={{
           drawerLabel: 'Categories',
           drawerIcon: () => (
@@ -67,7 +69,7 @@ function DrawerRoutes() {
       />
       <Drawer.Screen
         name="Classes"
-        component={Perfil}
+        component={List}
         options={{
           drawerLabel: 'Classes',
           drawerIcon: () => (

@@ -11,6 +11,7 @@ const classes = [
     responsible: 'professor',
     published: '2021-06-01',
     image: gramatica,
+    url: '',
   },
   {
     id: 2,
@@ -20,6 +21,7 @@ const classes = [
     responsible: 'professor',
     published: '2021-06-01',
     image: historia,
+    url: '',
   },
   {
     id: 3,
@@ -29,6 +31,7 @@ const classes = [
     responsible: 'professor',
     published: '2021-06-01',
     image: teologia,
+    url: '',
   },
 ];
 

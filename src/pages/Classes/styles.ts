@@ -18,4 +18,15 @@ export const styles = StyleSheet.create({
     fontWeight: '400',
     marginHorizontal: 67,
   },
+  searchInput: {
+    height: 35,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 3,
+    backgroundColor: 'white',
+    fontSize: 14,
+    width: '50%',
+    marginLeft: 5,
+  },
 });
