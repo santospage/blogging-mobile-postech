@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   resume: {
-    color: '#000000',
+    color: '#737380',
     fontWeight: '500',
     lineHeight: 24,
     fontSize: 15,

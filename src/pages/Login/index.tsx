@@ -8,16 +8,18 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import Toast from 'react-native-toast-message';
 
 import { styles } from './styles';
 import BasePage from '../BasePage';
+import { authService } from '../../services/Auth/AuthService';
 
 type RootStackParamList = {
   Home: undefined;
   Login: undefined;
   Cadastro: undefined;
   Drawer: undefined;
-  ListaPets: undefined;
+  ListClasses: undefined;
 };
 
 type LoginScreenNavigationProp = StackNavigationProp<
@@ -30,8 +32,32 @@ type Props = {
 };
 
 export default function Login({ navigation }: Props) {
-  const [nome, onChangeNome] = useState<string>('');
-  const [senha, onChangeSenha] = useState<string>('');
+  const [user, onChangeNome] = useState<string>('');
+  const [password, onChangeSenha] = useState<string>('');
+
+  const handleLogin = async () => {
+    try {
+      const loginData = {
+        user: user,
+        password: password,
+      };
+
+      const response = await authService.login(loginData);
+
+      if (response) {
+        sessionStorage.setItem('userSession', user);
+        navigation.navigate('Drawer');
+      }
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        position: 'top',
+        text1: 'Erro de autenticação',
+        text2: 'Usuário ou senha incorretos',
+        visibilityTime: 4000,
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -48,23 +74,20 @@ export default function Login({ navigation }: Props) {
             <TextInput
               style={styles.input}
               onChangeText={onChangeNome}
-              value={nome}
+              value={user}
               placeholder="User"
               placeholderTextColor={'#BCBCBC'}
             />
             <TextInput
               style={styles.input}
               onChangeText={onChangeSenha}
-              value={senha}
+              value={password}
               placeholder="Password"
               placeholderTextColor={'#BCBCBC'}
               secureTextEntry
             />
 
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => navigation.navigate('Drawer')}
-            >
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
               <Text style={styles.textoBotao}>Confirm</Text>
             </TouchableOpacity>
             <Image
@@ -74,6 +97,7 @@ export default function Login({ navigation }: Props) {
           </View>
         </ImageBackground>
       </BasePage>
+      <Toast />
     </View>
   );
 }

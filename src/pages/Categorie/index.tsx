@@ -1,45 +1,79 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import Modal from 'react-native-modal';
+import Toast from 'react-native-toast-message';
 
 import CategorieForm from './Form';
 import { styles } from './styles';
-import mockCategories from '../../mocks/categories';
-
-export type Category = {
-  id: number;
-  name: string;
-};
+import { CategoryModel } from '../../interfaces/Categories/Categories';
+import { categoryService } from '../../services/Categories/CategorieService';
 
 export default function CategoryList() {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
-  const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
+  const [currentCategory, setCurrentCategory] = useState<CategoryModel | null>(
+    null
+  );
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        setCategories(mockCategories);
-      } catch (error) {
-        Alert.alert('Alert', 'Unable to load categories');
-      }
-    };
-    fetchCategories();
+    const subscription = categoryService.getCategories().subscribe({
+      next: (data) => setCategories(data),
+      error: (error) => {
+        Toast.show({
+          type: 'error',
+          text1: 'Failed to load categories',
+          text2: error.toString(),
+        });
+      },
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const handleAddCategory = (newCategory: Category) => {
-    setCategories([...categories, newCategory]);
-    closeModal();
+  const handleAddCategory = (newCategory: CategoryModel) => {
+    categoryService.postCategory(newCategory).subscribe({
+      next: (savedCategory) => {
+        setCategories([...categories, savedCategory]);
+        closeModal();
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Category added successfully',
+        });
+      },
+      error: (error) => {
+        console.error('Failed to add category:', error);
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Failed to add category. Please try again later.',
+        });
+      },
+    });
   };
 
-  const handleEditCategory = (updatedCategory: Category) => {
-    setCategories(
-      categories.map((u) => (u.id === updatedCategory.id ? updatedCategory : u))
-    );
-    closeModal();
+  const handleDeleteCategory = (id: string) => {
+    categoryService.deleteCategory(id).subscribe({
+      next: () => {
+        setCategories(categories.filter((u) => u._id !== id));
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Category deleted successfully',
+        });
+      },
+      error: (error) => {
+        console.error('Failed to delete category:', error);
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Failed to delete category. Please try again later.',
+        });
+      },
+    });
   };
 
-  const confirmDeleteCategory = (id: number) => {
+  const confirmDeleteCategory = (id: string) => {
     Alert.alert(
       'Confirmation',
       'Are you sure you want to delete this category?',
@@ -55,11 +89,7 @@ export default function CategoryList() {
     );
   };
 
-  const handleDeleteCategory = (id: number) => {
-    setCategories(categories.filter((u) => u.id !== id));
-  };
-
-  const openModal = (category: Category | null = null) => {
+  const openModal = (category: CategoryModel | null = null) => {
     setCurrentCategory(category);
     setModalVisible(true);
   };
@@ -69,7 +99,7 @@ export default function CategoryList() {
     setCurrentCategory(null);
   };
 
-  const renderItem = ({ item }: { item: Category }) => (
+  const renderItem = ({ item }: { item: CategoryModel }) => (
     <View style={styles.categoryItem}>
       <Text style={styles.categoryText}>Name: {item.name}</Text>
       <View style={styles.actions}>
@@ -81,7 +111,7 @@ export default function CategoryList() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.actionButton}
-          onPress={() => confirmDeleteCategory(item.id)}
+          onPress={() => confirmDeleteCategory(item._id)}
         >
           <Text style={styles.actionButtonText}>Delete</Text>
         </TouchableOpacity>
@@ -93,7 +123,7 @@ export default function CategoryList() {
     <View style={styles.container}>
       <FlatList
         data={categories}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item._id.toString()}
         renderItem={renderItem}
       />
       <TouchableOpacity style={styles.addButton} onPress={() => openModal()}>
@@ -103,10 +133,11 @@ export default function CategoryList() {
       <Modal isVisible={isModalVisible}>
         <CategorieForm
           category={currentCategory}
-          onSave={currentCategory ? handleEditCategory : handleAddCategory}
+          onSave={handleAddCategory}
           onClose={closeModal}
         />
       </Modal>
+      <Toast />
     </View>
   );
 }

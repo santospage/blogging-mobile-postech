@@ -1,20 +1,28 @@
-import React, { useState } from 'react';
-import { FlatList, Text, View, TextInput } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { FlatList, Text, View, TextInput, Alert } from 'react-native';
+
 import { Card } from './Card';
 import BasePage from '../BasePage';
-import classes from '../../mocks/classes';
 import { styles } from './styles';
+import { ClassRoomModel } from '../../interfaces/Classes/Classes';
+import { classroomService } from '../../services/Classes/ClassRoomService';
 
-interface ListaPetsProps {
-  navigation: {
-    navigate: (screen: string) => void;
-  };
-}
-
-export default function ListaPets({ navigation }: ListaPetsProps) {
+export default function ListClasses({ navigation }: any) {
   const [searchText, setSearchText] = useState('');
+  const [classes, setClasses] = useState<ClassRoomModel[]>([]);
 
-  // Filtra as classes pelo texto de busca no resumo
+  useEffect(() => {
+    const subscription = classroomService.getClasses().subscribe({
+      next: (data) => setClasses(data),
+      error: (error) => {
+        Alert.alert('Alert', error);
+      },
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Filter classes
   const filteredClasses = classes.filter((classItem) =>
     classItem.resume.toLowerCase().includes(searchText.toLowerCase())
   );
@@ -34,7 +42,7 @@ export default function ListaPets({ navigation }: ListaPetsProps) {
           />
           <FlatList
             data={filteredClasses}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item._id}
             renderItem={({ item }) => (
               <Card {...item} navigation={navigation} />
             )}

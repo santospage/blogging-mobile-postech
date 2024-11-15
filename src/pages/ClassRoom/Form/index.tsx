@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
 
-import { ClassRoom } from '../List';
 import { styles } from '../Form/styles';
+import { ClassRoomModel } from '../../../interfaces/Classes/Classes';
 
 type ClassRoomFormProps = {
-  classRoom: ClassRoom | null;
-  onSave: (user: ClassRoom) => void;
+  classRoom: ClassRoomModel | null;
+  onSave: (user: ClassRoomModel) => void;
   onClose: () => void;
 };
 
@@ -17,16 +17,23 @@ export default function ClassRoomForm({
 }: ClassRoomFormProps) {
   const [classRoomData, setClassRoomData] = useState<
     Pick<
-      ClassRoom,
-      'title' | 'detail' | 'resume' | 'responsible' | 'published' | 'url'
+      ClassRoomModel,
+      | 'title'
+      | 'detail'
+      | 'resume'
+      | 'category'
+      | 'user'
+      | 'updatedAt'
+      | 'image'
     >
   >({
     title: '',
     detail: '',
     resume: '',
-    responsible: '',
-    published: '',
-    url: '',
+    category: { name: '' },
+    user: { user: '' },
+    updatedAt: '',
+    image: '',
   });
 
   useEffect(() => {
@@ -35,18 +42,20 @@ export default function ClassRoomForm({
         title: classRoom.title,
         detail: classRoom.detail,
         resume: classRoom.resume,
-        responsible: classRoom.responsible,
-        published: classRoom.published,
-        url: classRoom.url,
+        category: { name: classRoom.category.name },
+        user: classRoom.user,
+        updatedAt: classRoom.updatedAt,
+        image: classRoom.image,
       });
     } else {
       setClassRoomData({
         title: '',
         detail: '',
         resume: '',
-        responsible: '',
-        published: '',
-        url: '',
+        category: { name: '' },
+        user: { user: '' },
+        updatedAt: '',
+        image: '',
       });
     }
   }, [classRoom]);
@@ -56,13 +65,11 @@ export default function ClassRoomForm({
       classRoomData.title &&
       classRoomData.detail &&
       classRoomData.resume &&
-      classRoomData.responsible &&
-      classRoomData.published &&
-      classRoomData.url
+      classRoomData.category
     ) {
       const newClassRoom = classRoom
         ? { ...classRoom, ...classRoomData }
-        : { ...classRoomData, id: Date.now() };
+        : { ...classRoomData, _id: Date.now().toString() };
       onSave(newClassRoom);
     } else {
       Alert.alert('Alert', 'Fill in all fields');
@@ -105,35 +112,53 @@ export default function ClassRoomForm({
         />
       </View>
       <View style={styles.inputRow}>
+        <Text style={styles.label}>Category:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Category"
+          value={classRoomData.category.name}
+          onChangeText={(text) =>
+            setClassRoomData({ ...classRoomData, category: { name: text } })
+          }
+        />
+      </View>
+      <View style={styles.inputRow}>
         <Text style={styles.label}>Responsible:</Text>
         <TextInput
           style={styles.input}
           placeholder="Responsible"
-          value={classRoomData.responsible}
+          value={classRoomData.user.user}
           onChangeText={(text) =>
-            setClassRoomData({ ...classRoomData, responsible: text })
+            setClassRoomData({ ...classRoomData, user: { user: text } })
           }
         />
       </View>
       <View style={styles.inputRow}>
-        <Text style={styles.label}>Published:</Text>
+        <Text style={styles.label}>Date:</Text>
         <TextInput
           style={styles.input}
-          placeholder="Published"
-          value={classRoomData.published}
-          onChangeText={(text) =>
-            setClassRoomData({ ...classRoomData, published: text })
+          placeholder="Date"
+          value={
+            classRoomData.updatedAt
+              ? new Intl.DateTimeFormat('pt-BR').format(
+                  new Date(classRoomData.updatedAt)
+                )
+              : ''
           }
+          onChangeText={(text) =>
+            setClassRoomData({ ...classRoomData, updatedAt: text })
+          }
+          editable={false}
         />
       </View>
       <View style={styles.inputRow}>
-        <Text style={styles.label}>URL:</Text>
+        <Text style={styles.label}>Image:</Text>
         <TextInput
           style={styles.input}
-          placeholder="URL"
-          value={classRoomData.url}
+          placeholder="Image"
+          value={classRoomData.image}
           onChangeText={(text) =>
-            setClassRoomData({ ...classRoomData, url: text })
+            setClassRoomData({ ...classRoomData, image: text })
           }
         />
       </View>
