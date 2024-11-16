@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Image } from 'react-native';
@@ -12,11 +12,14 @@ import ClassRoom from '../pages/ClassRoom';
 import Categorie from '../pages/Categorie';
 import List from '../pages/ClassRoom/List';
 import * as styles from '../routes/styles';
+import { AuthenticationContext } from '../contexts/AuthenticationContext';
+import Logout from '../pages/Logout';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function DrawerRoutes() {
+  const authContext = useContext(AuthenticationContext);
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -82,23 +85,43 @@ function DrawerRoutes() {
           title: '',
         }}
       />
+      <Drawer.Screen
+        name="Logout"
+        component={Logout}
+        options={{
+          drawerLabel: 'Logout',
+          drawerIcon: () => (
+            <Image
+              source={require('../../assets/classes.png')}
+              style={styles.customStyles.icon}
+            />
+          ),
+          headerTransparent: true,
+          title: '',
+          drawerItemStyle: authContext && authContext.isLogged ? { display: 'none' } : {},
+        }}
+      />
     </Drawer.Navigator>
   );
 }
 
 export default function Navigation(): JSX.Element {
+  const authContext = useContext(AuthenticationContext);
+    
   return (
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Home"
         screenOptions={{ headerTitle: '', headerShown: false }}
       >
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ title: 'Login' }}
-        />
+        <Stack.Screen name="Home" component={Home} />        
+        {!authContext || !authContext.isLogged && (                  
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ title: 'Login' }}
+          />
+        )}     
         <Stack.Screen name="Drawer" component={DrawerRoutes} />
         <Stack.Screen name="ClassRoom" component={ClassRoom} />
       </Stack.Navigator>

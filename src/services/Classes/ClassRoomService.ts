@@ -1,5 +1,5 @@
 import { Observable, from, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, retry, timeout } from 'rxjs/operators';
 
 import api from '../api';
 import { ClassRoomModel } from '../../interfaces/Classes/Classes';
@@ -7,12 +7,12 @@ import { ClassRoomModel } from '../../interfaces/Classes/Classes';
 export const classroomService = {
   getClasses: (): Observable<ClassRoomModel[]> => {
     return from(api.get('/classes')).pipe(
+      timeout(10000),
+      retry(2),
       map((response) => response.data),
-      catchError((error) => {
+      catchError((error) => {        
         console.error('Failed to load classes:', error);
-        return throwError(
-          () => 'Failed to load classes. Please try again later.'
-        );
+        return throwError(() => new Error('Failed to load classes. Please try again later.'));
       })
     );
   },

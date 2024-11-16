@@ -3,6 +3,7 @@ import { BASE_URL } from '@env';
 
 const api = axios.create({
   baseURL: BASE_URL,
+  timeout: 10000,
 });
 
 export default api;

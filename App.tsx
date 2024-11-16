@@ -1,7 +1,9 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { useFonts, Poppins_400Regular } from '@expo-google-fonts/poppins';
+
 import Navigation from './src/routes/navigation';
+import { AuthentuicationProvider } from './src/contexts/AuthenticationContext';
 
 export default function App(): JSX.Element | null {
   const [fontsLoaded, fontError] = useFonts({
@@ -12,5 +14,9 @@ export default function App(): JSX.Element | null {
     return null;
   }
 
-  return <Navigation />;
+  return (
+    <AuthentuicationProvider>
+      <Navigation />
+    </AuthentuicationProvider>
+  )
 }

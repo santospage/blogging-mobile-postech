@@ -24,9 +24,7 @@ export const categoryService = {
     if (!token) {
       return throwError(() => new Error('No token found'));
     }
-
-    console.log(category);
-
+    
     return from(
       api.put(`/categories/${category._id}`, category, {
         headers: {
