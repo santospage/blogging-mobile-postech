@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Image } from 'react-native';
@@ -14,12 +14,26 @@ import List from '../pages/ClassRoom/List';
 import * as styles from '../routes/styles';
 import { AuthenticationContext } from '../contexts/AuthenticationContext';
 import Logout from '../pages/Logout';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { tokenService } from '../services/Auth/TokenService';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function DrawerRoutes() {
   const authContext = useContext(AuthenticationContext);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = await AsyncStorage.getItem('ACCESS_TOKEN_KEY');
+      const isValid = await tokenService.isValid();
+      setIsAuthenticated(!!token && isValid);
+    };
+
+    checkAuth();
+  }, []);
+
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -40,51 +54,109 @@ function DrawerRoutes() {
           drawerItemStyle: { display: 'none' },
         }}
       />
-      <Drawer.Screen
-        name="Users"
-        component={User}
-        options={{
-          drawerLabel: 'Users',
-          drawerIcon: () => (
-            <Image
-              source={require('../../assets/users.png')}
-              style={styles.customStyles.icon}
-            />
-          ),
-          headerTransparent: true,
-          title: '',
-        }}
-      />
-      <Drawer.Screen
-        name="Categories"
-        component={Categorie}
-        options={{
-          drawerLabel: 'Categories',
-          drawerIcon: () => (
-            <Image
-              source={require('../../assets/categories.png')}
-              style={styles.customStyles.icon}
-            />
-          ),
-          headerTransparent: true,
-          title: '',
-        }}
-      />
-      <Drawer.Screen
-        name="Classes"
-        component={List}
-        options={{
-          drawerLabel: 'Classes',
-          drawerIcon: () => (
-            <Image
-              source={require('../../assets/classes.png')}
-              style={styles.customStyles.icon}
-            />
-          ),
-          headerTransparent: true,
-          title: '',
-        }}
-      />
+
+      {isAuthenticated ? (
+        <Drawer.Screen
+          name="Users"
+          component={User}
+          options={{
+            drawerLabel: 'Users',
+            drawerIcon: () => (
+              <Image
+                source={require('../../assets/users.png')}
+                style={styles.customStyles.icon}
+              />
+            ),
+            headerTransparent: true,
+            title: '',
+          }}
+        />
+      ) : (
+        <Drawer.Screen
+          name="Users"
+          component={Login}
+          options={{
+            drawerLabel: 'Users',
+            drawerIcon: () => (
+              <Image
+                source={require('../../assets/categories.png')}
+                style={styles.customStyles.icon}
+              />
+            ),
+            headerTransparent: true,
+            title: '',
+          }}
+        />
+      )}
+
+      {isAuthenticated ? (
+        <Drawer.Screen
+          name="Categories"
+          component={Categorie}
+          options={{
+            drawerLabel: 'Categories',
+            drawerIcon: () => (
+              <Image
+                source={require('../../assets/categories.png')}
+                style={styles.customStyles.icon}
+              />
+            ),
+            headerTransparent: true,
+            title: '',
+          }}
+        />
+      ) : (
+        <Drawer.Screen
+          name="Categories"
+          component={Login}
+          options={{
+            drawerLabel: 'Categories',
+            drawerIcon: () => (
+              <Image
+                source={require('../../assets/categories.png')}
+                style={styles.customStyles.icon}
+              />
+            ),
+            headerTransparent: true,
+            title: '',
+          }}
+        />
+      )}
+
+      {isAuthenticated ? (
+        <Drawer.Screen
+          name="Classes"
+          component={List}
+          options={{
+            drawerLabel: 'Classes',
+            drawerIcon: () => (
+              <Image
+                source={require('../../assets/classes.png')}
+                style={styles.customStyles.icon}
+              />
+            ),
+            headerTransparent: true,
+            title: '',
+          }}
+        />
+      ) : (
+        <Drawer.Screen
+          name="Classes"
+          component={Login}
+          options={{
+            drawerLabel: 'Classes',
+            drawerIcon: () => (
+              <Image
+                source={require('../../assets/categories.png')}
+                style={styles.customStyles.icon}
+              />
+            ),
+            headerTransparent: true,
+            title: '',
+          }}
+        />
+      )}
+
       <Drawer.Screen
         name="Logout"
         component={Logout}
@@ -98,7 +170,8 @@ function DrawerRoutes() {
           ),
           headerTransparent: true,
           title: '',
-          drawerItemStyle: authContext && authContext.isLogged ? { display: 'none' } : {},
+          drawerItemStyle:
+            authContext && authContext.isLogged ? { display: 'none' } : {},
         }}
       />
     </Drawer.Navigator>
@@ -107,21 +180,22 @@ function DrawerRoutes() {
 
 export default function Navigation(): JSX.Element {
   const authContext = useContext(AuthenticationContext);
-    
+
   return (
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Home"
         screenOptions={{ headerTitle: '', headerShown: false }}
       >
-        <Stack.Screen name="Home" component={Home} />        
-        {!authContext || !authContext.isLogged && (                  
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{ title: 'Login' }}
-          />
-        )}     
+        <Stack.Screen name="Home" component={Home} />
+        {!authContext ||
+          (!authContext.isLogged && (
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ title: 'Login' }}
+            />
+          ))}
         <Stack.Screen name="Drawer" component={DrawerRoutes} />
         <Stack.Screen name="ClassRoom" component={ClassRoom} />
       </Stack.Navigator>

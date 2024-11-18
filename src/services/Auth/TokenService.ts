@@ -1,7 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ACCESS_TOKEN_KEY = 'ACCESS_TOKEN_BLOGGING';
-const TOKEN_EXPIRATION_KEY = 'TOKEN_EXPIRATION_BLOGGING';
 const ONE_SECOND = 1;
 const ONE_MINUTE = ONE_SECOND * 60;
 const ONE_HOUR = ONE_MINUTE * 60;
@@ -9,10 +7,10 @@ const ONE_HOUR = ONE_MINUTE * 60;
 export const tokenService = {
   async save(accessToken: string) {
     try {
-      const expirationTime = Date.now() + ONE_HOUR * 1000;      
-      await AsyncStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+      const expirationTime = Date.now() + ONE_HOUR * 1000;
+      await AsyncStorage.setItem('ACCESS_TOKEN_KEY', accessToken);
       await AsyncStorage.setItem(
-        TOKEN_EXPIRATION_KEY,
+        'TOKEN_EXPIRATION_KEY',
         expirationTime.toString()
       );
     } catch (error) {
@@ -23,8 +21,8 @@ export const tokenService = {
   // Obtain token
   async get() {
     try {
-      const token = await AsyncStorage.getItem(ACCESS_TOKEN_KEY);
-      const expirationTime = await AsyncStorage.getItem(TOKEN_EXPIRATION_KEY);
+      const token = await AsyncStorage.getItem('ACCESS_TOKEN_KEY');
+      const expirationTime = await AsyncStorage.getItem('TOKEN_EXPIRATION_KEY');
 
       if (!token || !expirationTime) {
         return '';
@@ -46,21 +44,23 @@ export const tokenService = {
   // Delete token
   async delete() {
     try {
-      await AsyncStorage.removeItem(ACCESS_TOKEN_KEY);
-      await AsyncStorage.removeItem(TOKEN_EXPIRATION_KEY);
+      await AsyncStorage.removeItem('ACCESS_TOKEN_KEY');
+      await AsyncStorage.removeItem('TOKEN_EXPIRATION_KEY');
     } catch (error) {
       console.error('Error removing token:', error);
     }
   },
 
   async isValid() {
-    const expirationTime = await AsyncStorage.getItem(TOKEN_EXPIRATION_KEY);
+    const expirationTime = await AsyncStorage.getItem('TOKEN_EXPIRATION_KEY');
 
     try {
       const currentTime = Date.now();
-      return expirationTime !== null && currentTime <= parseInt(expirationTime, 10);
-    } catch (error) {      
+      return (
+        expirationTime !== null && currentTime <= parseInt(expirationTime, 10)
+      );
+    } catch (error) {
       return false;
     }
-  }  
+  },
 };

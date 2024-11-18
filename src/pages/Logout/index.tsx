@@ -12,9 +12,10 @@ import { styles } from './styles';
 import BasePage from '../BasePage';
 import { useContext } from 'react';
 import { AuthenticationContext } from '../../contexts/AuthenticationContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Logout({ navigation }: any) {
-  const { logout } = useContext(AuthenticationContext) || {}; 
+  const { logout } = useContext(AuthenticationContext) || {};
   const handleLogout = async () => {
     Alert.alert(
       'Confirm Logout',
@@ -25,10 +26,12 @@ export default function Logout({ navigation }: any) {
           style: 'cancel',
         },
         {
-          text: 'Yes, Logout',
-          onPress: async () => {            
-            await logout();          
-            
+          text: 'Confirm',
+          onPress: async () => {
+            await AsyncStorage.setItem('ACCESS_TOKEN_KEY', '');
+            await AsyncStorage.setItem('USER_SESSION', '');
+            await AsyncStorage.setItem('TOKEN_EXPIRATION_KEY', '');
+
             // Navigate to Home screen
             navigation.navigate('Home');
           },
@@ -50,7 +53,9 @@ export default function Logout({ navigation }: any) {
               source={require('../../../assets/logo.png')}
               style={styles.image}
             />
-            <Text style={styles.logoutText}>Are you sure you want to logout?</Text>
+            <Text style={styles.logoutText}>
+              Are you sure you want to logout?
+            </Text>
             <TouchableOpacity style={styles.button} onPress={handleLogout}>
               <Text style={styles.textoBotao}>Logout</Text>
             </TouchableOpacity>
