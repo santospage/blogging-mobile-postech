@@ -1,1 +1,1 @@
-PUBLIC_BACKEND_URL=http://ip_address:port/blogging
+BASE_URL=http://ip_address:port/blogging
