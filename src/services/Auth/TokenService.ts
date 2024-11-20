@@ -22,17 +22,6 @@ export const tokenService = {
   async get() {
     try {
       const token = await AsyncStorage.getItem('ACCESS_TOKEN_KEY');
-      const expirationTime = await AsyncStorage.getItem('TOKEN_EXPIRATION_KEY');
-
-      if (!token || !expirationTime) {
-        return '';
-      }
-
-      const currentTime = Date.now();
-      if (currentTime > parseInt(expirationTime, 10)) {
-        await this.delete();
-        return '';
-      }
 
       return token;
     } catch (error) {

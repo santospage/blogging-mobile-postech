@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
-
+import { View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { styles } from '../Form/styles';
 import { CategoryModel } from '../../../interfaces/Categories/Categories';
-import { categoryService } from '../../../services/Categories/CategorieService';
 
 type CategoryFormProps = {
   category: CategoryModel | null;
@@ -16,37 +14,17 @@ export default function CategoryForm({
   onSave,
   onClose,
 }: CategoryFormProps) {
-  const [categoryData, setCategoryData] = useState<Pick<CategoryModel, 'name'>>(
-    {
-      name: '',
-    }
-  );
+  const [name, setName] = useState('');
 
   useEffect(() => {
-    if (category) {
-      setCategoryData({
-        name: category.name,
-      });
-    } else {
-      setCategoryData({ name: '' });
-    }
+    setName(category?.name || '');
   }, [category]);
 
-  const handleSave = async () => {
-    if (categoryData.name) {
-      try {
-        const newCategory = category
-          ? { ...category, ...categoryData }
-          : { ...categoryData, _id: Date.now().toString() };
-
-        categoryService.putCategory(newCategory);
-
-        onSave(newCategory);
-      } catch (error) {
-        Alert.alert('Error', 'Failed to save category');
-      }
+  const handleSave = () => {
+    if (category) {
+      onSave({ ...category, name });
     } else {
-      Alert.alert('Alert', 'Fill in all fields');
+      onSave({ name });
     }
   };
 
@@ -57,10 +35,8 @@ export default function CategoryForm({
         <TextInput
           style={styles.input}
           placeholder="Name"
-          value={categoryData.name}
-          onChangeText={(text) =>
-            setCategoryData({ ...categoryData, name: text })
-          }
+          value={name}
+          onChangeText={setName}
         />
       </View>
       <View style={styles.buttonContainer}>

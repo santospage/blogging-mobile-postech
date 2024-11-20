@@ -1,44 +1,29 @@
 import React from 'react';
 import {
-  Alert,
   View,
   Text,
   TouchableOpacity,
   ImageBackground,
   Image,
 } from 'react-native';
-
 import { styles } from './styles';
 import BasePage from '../BasePage';
-import { useContext } from 'react';
-import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Logout({ navigation }: any) {
-  const { logout } = useContext(AuthenticationContext) || {};
   const handleLogout = async () => {
-    Alert.alert(
-      'Confirm Logout',
-      'Are you sure you want to log out?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Confirm',
-          onPress: async () => {
-            await AsyncStorage.setItem('ACCESS_TOKEN_KEY', '');
-            await AsyncStorage.setItem('USER_SESSION', '');
-            await AsyncStorage.setItem('TOKEN_EXPIRATION_KEY', '');
+    // Clear authentications information
+    await AsyncStorage.setItem('ACCESS_TOKEN_KEY', '');
+    await AsyncStorage.setItem('USER_SESSION', '');
+    await AsyncStorage.setItem('TOKEN_EXPIRATION_KEY', '');
 
-            // Navigate to Home screen
-            navigation.navigate('Home');
-          },
-        },
-      ],
-      { cancelable: true }
-    );
+    // Home navigation
+    navigation.navigate('Home');
+  };
+
+  const handleCancel = () => {
+    // Home navigation
+    navigation.navigate('Home');
   };
 
   return (
@@ -57,7 +42,10 @@ export default function Logout({ navigation }: any) {
               Are you sure you want to logout?
             </Text>
             <TouchableOpacity style={styles.button} onPress={handleLogout}>
-              <Text style={styles.textoBotao}>Logout</Text>
+              <Text style={styles.textoBotao}>Confirm</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handleCancel}>
+              <Text style={styles.textoBotao}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </ImageBackground>

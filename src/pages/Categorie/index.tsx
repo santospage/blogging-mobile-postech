@@ -3,7 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import Modal from 'react-native-modal';
 import Toast from 'react-native-toast-message';
 
-import CategorieForm from './Form';
+import CategoryForm from './Form';
 import { styles } from './styles';
 import { CategoryModel } from '../../interfaces/Categories/Categories';
 import { categoryService } from '../../services/Categories/CategorieService';
@@ -30,44 +30,54 @@ export default function CategoryList() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const handleAddCategory = (newCategory: CategoryModel) => {
-    categoryService.postCategory(newCategory).subscribe({
+  const handleAddCategory = async (newCategory: Omit<CategoryModel, '_id'>) => {
+    (await categoryService.postCategory(newCategory)).subscribe({
       next: (savedCategory) => {
-        setCategories([...categories, savedCategory]);
+        const categoryToAdd = savedCategory.id;
+        setCategories((prevCategories) => {
+          return [...prevCategories, categoryToAdd];
+        });
+
         closeModal();
         Toast.show({
           type: 'success',
           text1: 'Success',
-          text2: 'Category added successfully',
+          text2: 'Category created successfully',
         });
       },
       error: (error) => {
-        console.error('Failed to add category:', error);
         Toast.show({
           type: 'error',
           text1: 'Error',
-          text2: 'Failed to add category. Please try again later.',
+          text2: 'Failed to create category.',
         });
       },
     });
   };
 
-  const handleDeleteCategory = (id: string) => {
-    categoryService.deleteCategory(id).subscribe({
-      next: () => {
-        setCategories(categories.filter((u) => u._id !== id));
+  const handleEditCategory = async (updatedCategory: CategoryModel) => {
+    (await categoryService.putCategory(updatedCategory)).subscribe({
+      next: (savedCategory) => {
+        setCategories((prevCategories) =>
+          prevCategories.map((cat) =>
+            cat._id === savedCategory._id
+              ? { ...cat, name: savedCategory.name }
+              : cat
+          )
+        );
+
+        closeModal();
         Toast.show({
           type: 'success',
           text1: 'Success',
-          text2: 'Category deleted successfully',
+          text2: 'Category updated successfully',
         });
       },
       error: (error) => {
-        console.error('Failed to delete category:', error);
         Toast.show({
           type: 'error',
           text1: 'Error',
-          text2: 'Failed to delete category. Please try again later.',
+          text2: 'Failed to update category.',
         });
       },
     });
@@ -87,6 +97,28 @@ export default function CategoryList() {
       ],
       { cancelable: true }
     );
+  };
+
+  const handleDeleteCategory = async (id: string) => {
+    (await categoryService.deleteCategory(id)).subscribe({
+      next: () => {
+        setCategories((prevCategories) =>
+          prevCategories.filter((cat) => cat._id !== id)
+        );
+        Toast.show({
+          type: 'success',
+          text1: 'Deleted',
+          text2: 'Category deleted successfully.',
+        });
+      },
+      error: (error) => {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Failed to delete category.',
+        });
+      },
+    });
   };
 
   const openModal = (category: CategoryModel | null = null) => {
@@ -111,7 +143,7 @@ export default function CategoryList() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.actionButton}
-          onPress={() => confirmDeleteCategory(item._id)}
+          onPress={() => confirmDeleteCategory(item._id!)}
         >
           <Text style={styles.actionButtonText}>Delete</Text>
         </TouchableOpacity>
@@ -123,7 +155,7 @@ export default function CategoryList() {
     <View style={styles.container}>
       <FlatList
         data={categories}
-        keyExtractor={(item) => item._id.toString()}
+        keyExtractor={(item) => item._id!}
         renderItem={renderItem}
       />
       <TouchableOpacity style={styles.addButton} onPress={() => openModal()}>
@@ -131,13 +163,12 @@ export default function CategoryList() {
       </TouchableOpacity>
 
       <Modal isVisible={isModalVisible}>
-        <CategorieForm
+        <CategoryForm
           category={currentCategory}
-          onSave={handleAddCategory}
+          onSave={currentCategory ? handleEditCategory : handleAddCategory}
           onClose={closeModal}
         />
       </Modal>
-      <Toast />
     </View>
   );
 }

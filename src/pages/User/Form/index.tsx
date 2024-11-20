@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
 import { User } from '..';
 import { styles } from '../Form/styles';
 

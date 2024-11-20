@@ -74,7 +74,7 @@ function DrawerRoutes() {
       ) : (
         <Drawer.Screen
           name="Users"
-          component={Login}
+          component={Home}
           options={{
             drawerLabel: 'Users',
             drawerIcon: () => (
@@ -108,7 +108,7 @@ function DrawerRoutes() {
       ) : (
         <Drawer.Screen
           name="Categories"
-          component={Login}
+          component={Home}
           options={{
             drawerLabel: 'Categories',
             drawerIcon: () => (
@@ -142,7 +142,7 @@ function DrawerRoutes() {
       ) : (
         <Drawer.Screen
           name="Classes"
-          component={Login}
+          component={Home}
           options={{
             drawerLabel: 'Classes',
             drawerIcon: () => (
@@ -164,7 +164,7 @@ function DrawerRoutes() {
           drawerLabel: 'Logout',
           drawerIcon: () => (
             <Image
-              source={require('../../assets/classes.png')}
+              source={require('../../assets/logout.png')}
               style={styles.customStyles.icon}
             />
           ),
@@ -179,8 +179,6 @@ function DrawerRoutes() {
 }
 
 export default function Navigation(): JSX.Element {
-  const authContext = useContext(AuthenticationContext);
-
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -188,14 +186,11 @@ export default function Navigation(): JSX.Element {
         screenOptions={{ headerTitle: '', headerShown: false }}
       >
         <Stack.Screen name="Home" component={Home} />
-        {!authContext ||
-          (!authContext.isLogged && (
-            <Stack.Screen
-              name="Login"
-              component={Login}
-              options={{ title: 'Login' }}
-            />
-          ))}
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ title: 'Login' }}
+        />
         <Stack.Screen name="Drawer" component={DrawerRoutes} />
         <Stack.Screen name="ClassRoom" component={ClassRoom} />
       </Stack.Navigator>

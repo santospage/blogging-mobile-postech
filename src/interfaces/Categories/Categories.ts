@@ -1,5 +1,5 @@
 export type CategoryModel = {
-  _id: string;
+  _id?: string;
   name: string;
   navigation?: any;
 };
