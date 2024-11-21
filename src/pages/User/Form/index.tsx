@@ -1,50 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
-import { User } from '..';
-import { styles } from '../Form/styles';
-
-type UserFormProps = {
-  user: User | null;
-  onSave: (user: User) => void;
-  onClose: () => void;
-};
+import { View, TextInput, TouchableOpacity, Text } from 'react-native';
+import { styles } from './styles';
+import { UserFormProps } from '../../../interfaces/User/User';
 
 export default function UserForm({ user, onSave, onClose }: UserFormProps) {
-  const [userData, setUserData] = useState<
-    Pick<User, 'user' | 'fullName' | 'email' | 'password'>
-  >({
-    user: '',
-    fullName: '',
-    email: '',
-    password: '',
-  });
+  const [currentUser, setUser] = useState(user?.user || '');
+  const [fullName, setFullName] = useState(user?.fullName || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [password, setPassword] = useState(user?.password || '');
 
   useEffect(() => {
-    if (user) {
-      setUserData({
-        user: user.user,
-        fullName: user.fullName,
-        email: user.email,
-        password: user.password,
-      });
-    } else {
-      setUserData({ user: '', fullName: '', email: '', password: '' });
-    }
-  }, [user]);
+    setUser(user?.user || '');
+    setFullName(user?.fullName || '');
+    setEmail(user?.email || '');
+    setPassword(user?.password || '');
+  }, [user, fullName, email, password]);
 
   const handleSave = () => {
-    if (
-      userData.user &&
-      userData.fullName &&
-      userData.email &&
-      userData.password
-    ) {
-      const newUser = user
-        ? { ...user, ...userData }
-        : { ...userData, id: Date.now() };
-      onSave(newUser);
+    if (user) {
+      onSave({ ...user, user: currentUser, fullName, email, password });
     } else {
-      Alert.alert('Alert', 'Fill in all fields');
+      onSave({ user: currentUser, fullName, email, password });
     }
   };
 
@@ -55,26 +31,26 @@ export default function UserForm({ user, onSave, onClose }: UserFormProps) {
         <TextInput
           style={styles.input}
           placeholder="User"
-          value={userData.user}
-          onChangeText={(text) => setUserData({ ...userData, user: text })}
+          value={currentUser}
+          onChangeText={setUser}
         />
       </View>
       <View style={styles.inputRow}>
-        <Text style={styles.label}>FullName:</Text>
+        <Text style={styles.label}>Full Name:</Text>
         <TextInput
           style={styles.input}
           placeholder="Full Name"
-          value={userData.fullName}
-          onChangeText={(text) => setUserData({ ...userData, fullName: text })}
+          value={fullName}
+          onChangeText={setFullName}
         />
       </View>
       <View style={styles.inputRow}>
-        <Text style={styles.label}>E-Mail:</Text>
+        <Text style={styles.label}>Email:</Text>
         <TextInput
           style={styles.input}
           placeholder="Email"
-          value={userData.email}
-          onChangeText={(text) => setUserData({ ...userData, email: text })}
+          value={email}
+          onChangeText={setEmail}
         />
       </View>
       <View style={styles.inputRow}>
@@ -82,9 +58,9 @@ export default function UserForm({ user, onSave, onClose }: UserFormProps) {
         <TextInput
           style={styles.input}
           placeholder="Password"
-          value={userData.password}
-          secureTextEntry
-          onChangeText={(text) => setUserData({ ...userData, password: text })}
+          value={password}
+          secureTextEntry={true}
+          onChangeText={setPassword}
         />
       </View>
       <View style={styles.buttonContainer}>

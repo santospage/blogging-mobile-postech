@@ -5,8 +5,8 @@ import Toast from 'react-native-toast-message';
 
 import CategoryForm from './Form';
 import { styles } from './styles';
-import { CategoryModel } from '../../interfaces/Categories/Categories';
-import { categoryService } from '../../services/Categories/CategorieService';
+import { CategoryModel } from '../../interfaces/Category/Category';
+import { categoryService } from '../../services/Category/CategoryService';
 
 export default function CategoryList() {
   const [categories, setCategories] = useState<CategoryModel[]>([]);

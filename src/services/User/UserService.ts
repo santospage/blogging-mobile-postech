@@ -1,93 +1,94 @@
 import { Observable, from, throwError } from 'rxjs';
-import { timeout, retry, catchError, map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 import api from '../api';
-import { CategoryModel } from '../../interfaces/Categories/Categories';
+import { UserModel } from '../../interfaces/User/User';
 import { tokenService } from '../Auth/TokenService';
 
-export const categoryService = {
-  getCategories: (): Observable<CategoryModel[]> => {
-    return from(api.get('/categories')).pipe(
-      timeout(20000),
-      retry(2),
-      map((response) => response.data),
-      catchError((error) => {
-        console.error('Failed to load categories:', error.response || error);
-        return throwError(
-          () =>
-            new Error(
-              error.response?.data?.message ||
-                'Failed to load categories. Please try again later.'
-            )
-        );
-      })
-    );
-  },
-
-  postCategory: async (category: CategoryModel) => {
+export const userService = {
+  getUsers: async (): Promise<Observable<UserModel[]>> => {
     const token = await tokenService.get();
 
     return from(
-      api.post('/categories', category, {
+      api.get('/users', {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       })
     ).pipe(
-      timeout(10000),
-      retry(2),
       map((response) => response.data),
       catchError((error) => {
-        console.error('Failed to create category:', error.response || error);
+        console.error('Failed to load users:', error.response || error);
         return throwError(
           () =>
             new Error(
               error.response?.data?.message ||
-                'Failed to create category. Please try again later.'
+                'Failed to load users. Please try again later.'
             )
         );
       })
     );
   },
 
-  putCategory: async (
-    category: CategoryModel
-  ): Promise<Observable<CategoryModel>> => {
+  postUser: async (user: UserModel) => {
     const token = await tokenService.get();
 
     return from(
-      api.put(`/categories/${category._id}`, category, {
+      api.post('/users', user, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       })
     ).pipe(
-      timeout(20000),
-      retry(2),
+      map((response) => response.data),
+      catchError((error) => {
+        console.error('Failed to create user:', error.response || error);
+        return throwError(
+          () =>
+            new Error(
+              error.response?.data?.message ||
+                'Failed to create user. Please try again later.'
+            )
+        );
+      })
+    );
+  },
+
+  putUser: async (user: UserModel): Promise<Observable<UserModel>> => {
+    const token = await tokenService.get();
+
+    return from(
+      api.put(`/users/${user._id}`, user, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+    ).pipe(
       map((response) => {
-        const updatedCategory = response.data.id || response.data;
-        return updatedCategory;
+        const updatedUser = response.data.id || response.data;
+        return updatedUser;
       }),
       catchError((error) => {
-        console.error('Failed to update category:', error.response || error);
+        console.error('Failed to update user:', error.response || error);
         return throwError(
           () =>
             new Error(
               error.response?.data?.message ||
-                'Failed to update category. Please try again later.'
+                'Failed to update user. Please try again later.'
             )
         );
       })
     );
   },
 
-  deleteCategory: async (categoryId: string): Promise<Observable<void>> => {
+  deleteUser: async (userId: string): Promise<Observable<void>> => {
     const token = await tokenService.get();
 
     return from(
-      api.delete(`/categories/${categoryId}`, {
+      api.delete(`/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -95,13 +96,12 @@ export const categoryService = {
       })
     ).pipe(
       map(() => {
-        console.log('Category deleted successfully');
         return;
       }),
       catchError((error) => {
-        console.error('Failed to delete category:', error);
+        console.error('Failed to delete user:', error);
         return throwError(
-          () => new Error('Failed to delete category. Please try again later.')
+          () => new Error('Failed to delete user. Please try again later.')
         );
       })
     );

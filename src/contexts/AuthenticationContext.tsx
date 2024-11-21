@@ -1,14 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useState, useEffect } from 'react';
 
 import { tokenService } from '../services/Auth/TokenService';
 import {
   AuthContextType,
   AuthenticationProviderProps,
 } from '../interfaces/Authentication/Authentication';
-
-const ACCESS_TOKEN_KEY = 'access_token';
-const USER_SESSION = 'user_session';
 
 export const AuthenticationContext = createContext<AuthContextType | undefined>(
   undefined
@@ -22,8 +19,8 @@ export function AuthentuicationProvider({
   const [isLogged, setLogged] = useState<boolean>(false);
 
   const login = async (user: string, token: string) => {
-    await AsyncStorage.setItem(USER_SESSION, user);
-    await AsyncStorage.setItem(ACCESS_TOKEN_KEY, token);
+    await AsyncStorage.setItem('USER_SESSION', user);
+    await AsyncStorage.setItem('ACCESS_TOKEN_KEY', token);
 
     setUser(user);
     setToken(token);
@@ -31,8 +28,8 @@ export function AuthentuicationProvider({
   };
 
   const logout = async () => {
-    await AsyncStorage.removeItem(USER_SESSION);
-    await AsyncStorage.removeItem(ACCESS_TOKEN_KEY);
+    await AsyncStorage.removeItem('USER_SESSION');
+    await AsyncStorage.removeItem('ACCESS_TOKEN_KEY');
 
     setUser('');
     setToken('');
@@ -41,16 +38,16 @@ export function AuthentuicationProvider({
 
   useEffect(() => {
     const fetchData = async () => {
-      const storedUser = await AsyncStorage.getItem(USER_SESSION);
-      const storedToken = await AsyncStorage.getItem(ACCESS_TOKEN_KEY);
+      const storedUser = await AsyncStorage.getItem('USER_SESSION');
+      const storedToken = await AsyncStorage.getItem('ACCESS_TOKEN_KEY');
 
       if (storedUser && storedToken && (await tokenService.isValid())) {
         setUser(storedUser);
         setToken(storedToken);
         setLogged(true);
       } else {
-        await AsyncStorage.removeItem(USER_SESSION);
-        await AsyncStorage.removeItem(ACCESS_TOKEN_KEY);
+        await AsyncStorage.removeItem('USER_SESSION');
+        await AsyncStorage.removeItem('ACCESS_TOKEN_KEY');
         setUser('');
         setToken('');
         setLogged(false);

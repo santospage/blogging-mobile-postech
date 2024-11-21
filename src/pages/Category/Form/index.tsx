@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text } from 'react-native';
-import { styles } from '../Form/styles';
-import { CategoryModel } from '../../../interfaces/Categories/Categories';
-
-type CategoryFormProps = {
-  category: CategoryModel | null;
-  onSave: (category: CategoryModel) => void;
-  onClose: () => void;
-};
+import { styles } from './styles';
+import { CategoryFormProps } from '../../../interfaces/Category/Category';
 
 export default function CategoryForm({
   category,

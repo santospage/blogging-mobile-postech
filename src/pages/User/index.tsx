@@ -1,46 +1,97 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import Modal from 'react-native-modal';
+import Toast from 'react-native-toast-message';
 
-import mockUsers from '../../mocks/users';
 import UserForm from './Form';
 import { styles } from './styles';
-
-export type User = {
-  id: number;
-  user: string;
-  fullName: string;
-  email: string;
-  password: string;
-};
+import { UserModel } from '../../interfaces/User/User';
+import { userService } from '../../services/User/UserService';
 
 export default function UserList() {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserModel[]>([]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<UserModel | null>(null);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setUsers(mockUsers);
-      } catch (error) {
-        Alert.alert('Alert', 'Unable to load users');
-      }
+    const fetchData = async () => {
+      const subscription = (await userService.getUsers()).subscribe({
+        next: (data) => setUsers(data),
+        error: (error) => {
+          Toast.show({
+            type: 'error',
+            text1: 'Failed to load users',
+            text2: error.toString(),
+          });
+        },
+      });
+
+      return () => subscription.unsubscribe();
     };
-    fetchUsers();
+
+    fetchData();
   }, []);
 
-  const handleAddUser = (newUser: User) => {
-    setUsers([...users, newUser]);
-    closeModal();
+  const handleAddUser = async (newUser: Omit<UserModel, '_id'>) => {
+    (await userService.postUser(newUser)).subscribe({
+      next: (savedUser) => {
+        const userToAdd = savedUser.id;
+        setUsers((prevUsers) => {
+          return [...prevUsers, userToAdd];
+        });
+
+        closeModal();
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'User created successfully',
+        });
+      },
+      error: (error) => {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Failed to create user.',
+        });
+      },
+    });
   };
 
-  const handleEditUser = (updatedUser: User) => {
-    setUsers(users.map((u) => (u.id === updatedUser.id ? updatedUser : u)));
-    closeModal();
+  const handleEditUser = async (updatedUser: UserModel) => {
+    (await userService.putUser(updatedUser)).subscribe({
+      next: (savedUser) => {
+        setUsers((prevUsers) =>
+          prevUsers.map((cat) =>
+            cat._id === savedUser._id
+              ? {
+                  ...cat,
+                  user: savedUser.user,
+                  fullName: savedUser.fullName,
+                  email: savedUser.email,
+                  password: savedUser.password,
+                }
+              : cat
+          )
+        );
+
+        closeModal();
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'User updated successfully',
+        });
+      },
+      error: (error) => {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Failed to update user.',
+        });
+      },
+    });
   };
 
-  const confirmDeleteUser = (id: number) => {
+  const confirmDeleteUser = (id: string) => {
     Alert.alert(
       'Confirmation',
       'Are you sure you want to delete this user?',
@@ -56,11 +107,27 @@ export default function UserList() {
     );
   };
 
-  const handleDeleteUser = (id: number) => {
-    setUsers(users.filter((u) => u.id !== id));
+  const handleDeleteUser = async (id: string) => {
+    (await userService.deleteUser(id)).subscribe({
+      next: () => {
+        setUsers((prevUsers) => prevUsers.filter((cat) => cat._id !== id));
+        Toast.show({
+          type: 'success',
+          text1: 'Deleted',
+          text2: 'User deleted successfully.',
+        });
+      },
+      error: (error) => {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Failed to delete user.',
+        });
+      },
+    });
   };
 
-  const openModal = (user: User | null = null) => {
+  const openModal = (user: UserModel | null = null) => {
     setCurrentUser(user);
     setModalVisible(true);
   };
@@ -70,7 +137,7 @@ export default function UserList() {
     setCurrentUser(null);
   };
 
-  const renderItem = ({ item }: { item: User }) => (
+  const renderItem = ({ item }: { item: UserModel }) => (
     <View style={styles.userItem}>
       <Text style={styles.userText}>User: {item.user}</Text>
       <Text style={styles.userText}>Full Name: {item.fullName}</Text>
@@ -84,7 +151,7 @@ export default function UserList() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.actionButton}
-          onPress={() => confirmDeleteUser(item.id)}
+          onPress={() => confirmDeleteUser(item._id!)}
         >
           <Text style={styles.actionButtonText}>Delete</Text>
         </TouchableOpacity>
@@ -96,7 +163,7 @@ export default function UserList() {
     <View style={styles.container}>
       <FlatList
         data={users}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item._id!}
         renderItem={renderItem}
       />
       <TouchableOpacity style={styles.addButton} onPress={() => openModal()}>

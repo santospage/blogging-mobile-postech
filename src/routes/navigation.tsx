@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Image } from 'react-native';
@@ -9,10 +9,9 @@ import Login from '../pages/Login';
 import Classes from '../pages/Classes';
 import User from '../pages/User';
 import ClassRoom from '../pages/ClassRoom';
-import Categorie from '../pages/Categorie';
+import Category from '../pages/Category';
 import List from '../pages/ClassRoom/List';
 import * as styles from '../routes/styles';
-import { AuthenticationContext } from '../contexts/AuthenticationContext';
 import Logout from '../pages/Logout';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { tokenService } from '../services/Auth/TokenService';
@@ -21,7 +20,6 @@ const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function DrawerRoutes() {
-  const authContext = useContext(AuthenticationContext);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
@@ -79,7 +77,7 @@ function DrawerRoutes() {
             drawerLabel: 'Users',
             drawerIcon: () => (
               <Image
-                source={require('../../assets/categories.png')}
+                source={require('../../assets/users.png')}
                 style={styles.customStyles.icon}
               />
             ),
@@ -92,7 +90,7 @@ function DrawerRoutes() {
       {isAuthenticated ? (
         <Drawer.Screen
           name="Categories"
-          component={Categorie}
+          component={Category}
           options={{
             drawerLabel: 'Categories',
             drawerIcon: () => (
@@ -147,7 +145,7 @@ function DrawerRoutes() {
             drawerLabel: 'Classes',
             drawerIcon: () => (
               <Image
-                source={require('../../assets/categories.png')}
+                source={require('../../assets/classes.png')}
                 style={styles.customStyles.icon}
               />
             ),
@@ -170,8 +168,7 @@ function DrawerRoutes() {
           ),
           headerTransparent: true,
           title: '',
-          drawerItemStyle:
-            authContext && authContext.isLogged ? { display: 'none' } : {},
+          drawerItemStyle: !isAuthenticated ? { display: 'none' } : {},
         }}
       />
     </Drawer.Navigator>

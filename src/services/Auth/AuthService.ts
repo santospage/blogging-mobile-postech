@@ -1,5 +1,5 @@
 import { from, throwError } from 'rxjs';
-import { timeout, retry, catchError, map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 
 import { Login } from '../../interfaces/Login/Login';
 import api from '../api';
@@ -21,22 +21,22 @@ export const authService = {
         }
       )
     ).pipe(
-      timeout(10000),
-      retry(2),
-      map((response) => {        
+      map((response) => {
         if (response.data.token) {
           tokenService.save(response.data.token);
           return response.data;
         } else {
-          throw new Error('Falha na autenticação: token não encontrado');
+          throw new Error('Authentication failed: token not found');
         }
       }),
       catchError((error) => {
-        console.error('Erro ao tentar autenticar:', error);        
-        return throwError(() =>
-          new Error(
-            error.response?.data?.message || 'Falha ao autenticar. Tente novamente.'
-          )
+        console.error('Error when trying to authenticate:', error);
+        return throwError(
+          () =>
+            new Error(
+              error.response?.data?.message ||
+                'Failed to authenticate. Please try again later.'
+            )
         );
       })
     );

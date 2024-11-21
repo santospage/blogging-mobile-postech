@@ -2,13 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
 
 import { styles } from '../Form/styles';
-import { ClassRoomModel } from '../../../interfaces/Classes/Classes';
-
-type ClassRoomFormProps = {
-  classRoom: ClassRoomModel | null;
-  onSave: (user: ClassRoomModel) => void;
-  onClose: () => void;
-};
+import {
+  ClassRoomFormProps,
+  ClassRoomModel,
+} from '../../../interfaces/Classes/Classes';
 
 export default function ClassRoomForm({
   classRoom,

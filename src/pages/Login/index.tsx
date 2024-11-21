@@ -19,14 +19,19 @@ export default function Login({ navigation }: Props) {
   const [user, onChangeNome] = useState<string>('');
   const [password, onChangeSenha] = useState<string>('');
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const loginData = {
       user: user,
       password: password,
     };
-  
+
+    // Clear authentications information
+    await AsyncStorage.setItem('ACCESS_TOKEN_KEY', '');
+    await AsyncStorage.setItem('USER_SESSION', '');
+    await AsyncStorage.setItem('TOKEN_EXPIRATION_KEY', '');
+
     authService.login(loginData).subscribe({
-      next: async (response) => {    
+      next: async (response) => {
         await AsyncStorage.setItem('USER_SESSION', user);
         onChangeNome('');
         onChangeSenha('');
@@ -42,7 +47,7 @@ export default function Login({ navigation }: Props) {
         });
       },
     });
-  };  
+  };
 
   return (
     <View style={styles.container}>
@@ -73,8 +78,12 @@ export default function Login({ navigation }: Props) {
               secureTextEntry
               editable={true}
             />
-            
-            <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={false}>
+
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleLogin}
+              disabled={false}
+            >
               <Text style={styles.textoBotao}>Confirm</Text>
             </TouchableOpacity>
             <Image

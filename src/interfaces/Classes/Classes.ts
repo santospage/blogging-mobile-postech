@@ -17,3 +17,9 @@ export type ClassRoomModel = {
 export type ClassRoomParams = {
   params: ClassRoomModel;
 };
+
+export type ClassRoomFormProps = {
+  classRoom: ClassRoomModel | null;
+  onSave: (user: ClassRoomModel) => void;
+  onClose: () => void;
+};

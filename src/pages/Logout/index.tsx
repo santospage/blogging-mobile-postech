@@ -6,9 +6,10 @@ import {
   ImageBackground,
   Image,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { styles } from './styles';
 import BasePage from '../BasePage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Logout({ navigation }: any) {
   const handleLogout = async () => {
