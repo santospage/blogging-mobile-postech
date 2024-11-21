@@ -14,7 +14,7 @@ export default function UserForm({ user, onSave, onClose }: UserFormProps) {
     setFullName(user?.fullName || '');
     setEmail(user?.email || '');
     setPassword(user?.password || '');
-  }, [user, fullName, email, password]);
+  }, [user]);
 
   const handleSave = () => {
     if (user) {
