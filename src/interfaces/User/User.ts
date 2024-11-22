@@ -4,7 +4,7 @@ export type UserModel = {
   fullName: string;
   email?: string;
   password: string;
-  navigation?: any;
+  navigation?: unknown;
 };
 
 export type UserFormProps = {

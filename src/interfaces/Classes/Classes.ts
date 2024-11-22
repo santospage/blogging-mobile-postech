@@ -11,7 +11,7 @@ export type ClassRoomModel = {
     user: string;
   };
   image?: string;
-  navigation?: any;
+  navigation?: unknown;
 };
 
 export type ClassRoom = {
@@ -24,7 +24,7 @@ export type ClassRoom = {
   category: string;
   user: string;
   image?: string;
-  navigation?: any;
+  navigation?: unknown;
 };
 
 export type ClassRoomParams = {

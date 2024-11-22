@@ -11,6 +11,7 @@ export default function Home({ navigation }: Props) {
       <BasePage>
         <View style={styles.contentContainer}>
           <Image
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             source={require('../../../assets/logo.png')}
             style={styles.imagem}
           />

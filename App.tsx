@@ -18,13 +18,7 @@ export default function App(): JSX.Element | null {
   return (
     <AuthentuicationProvider>
       <Navigation />
-      <Toast
-        config={{
-          topOffset: () => 30,
-          visibilityTime: () => 3000,
-          zIndex: () => 9999,
-        }}
-      />
+      <Toast />
     </AuthentuicationProvider>
   );
 }

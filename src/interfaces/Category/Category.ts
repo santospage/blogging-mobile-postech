@@ -1,7 +1,7 @@
 export type CategoryModel = {
   _id?: string;
   name: string;
-  navigation?: any;
+  navigation?: unknown;
 };
 
 export type CategoryFormProps = {

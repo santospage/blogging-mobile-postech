@@ -15,7 +15,7 @@ export const userService = {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      })
+      }),
     ).pipe(
       map((response) => response.data),
       catchError((error) => {
@@ -24,10 +24,10 @@ export const userService = {
           () =>
             new Error(
               error.response?.data?.message ||
-                'Failed to load users. Please try again later.'
-            )
+                'Failed to load users. Please try again later.',
+            ),
         );
-      })
+      }),
     );
   },
 
@@ -40,7 +40,7 @@ export const userService = {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      })
+      }),
     ).pipe(
       map((response) => response.data),
       catchError((error) => {
@@ -49,10 +49,10 @@ export const userService = {
           () =>
             new Error(
               error.response?.data?.message ||
-                'Failed to create user. Please try again later.'
-            )
+                'Failed to create user. Please try again later.',
+            ),
         );
-      })
+      }),
     );
   },
 
@@ -65,7 +65,7 @@ export const userService = {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      })
+      }),
     ).pipe(
       map((response) => {
         const updatedUser = response.data.id || response.data;
@@ -77,10 +77,10 @@ export const userService = {
           () =>
             new Error(
               error.response?.data?.message ||
-                'Failed to update user. Please try again later.'
-            )
+                'Failed to update user. Please try again later.',
+            ),
         );
-      })
+      }),
     );
   },
 
@@ -93,7 +93,7 @@ export const userService = {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      })
+      }),
     ).pipe(
       map(() => {
         return;
@@ -101,9 +101,9 @@ export const userService = {
       catchError((error) => {
         console.error('Failed to delete user:', error);
         return throwError(
-          () => new Error('Failed to delete user. Please try again later.')
+          () => new Error('Failed to delete user. Please try again later.'),
         );
-      })
+      }),
     );
   },
 };

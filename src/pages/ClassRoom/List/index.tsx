@@ -20,7 +20,7 @@ export default function ClassRoomList() {
         await classroomService.getClassesManagerial()
       ).subscribe({
         next: (data: ClassRoomModel[]) => setClasses(data),
-        error: (error: any) => {
+        error: (error: Error) => {
           Toast.show({
             type: 'error',
             text1: 'Failed to load classes',
@@ -36,7 +36,7 @@ export default function ClassRoomList() {
   }, []);
 
   const handleAddClassRoom = async (
-    newClassRoom: Omit<ClassRoomModel, '_id'>
+    newClassRoom: Omit<ClassRoomModel, '_id'>,
   ) => {
     (await classroomService.postClassRoom(newClassRoom)).subscribe({
       next: (savedClassRoom) => {
@@ -52,7 +52,7 @@ export default function ClassRoomList() {
           text2: 'ClassRoom created successfully',
         });
       },
-      error: (error) => {
+      error: () => {
         Toast.show({
           type: 'error',
           text1: 'Error',
@@ -77,8 +77,8 @@ export default function ClassRoomList() {
                   user: savedClassRoom.user,
                   image: savedClassRoom.image,
                 }
-              : cat
-          )
+              : cat,
+          ),
         );
 
         closeModal();
@@ -88,7 +88,7 @@ export default function ClassRoomList() {
           text2: 'Classroom updated successfully',
         });
       },
-      error: (error) => {
+      error: () => {
         Toast.show({
           type: 'error',
           text1: 'Error',
@@ -110,7 +110,7 @@ export default function ClassRoomList() {
           onPress: () => handleDeleteClassRoom(id),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
@@ -118,7 +118,7 @@ export default function ClassRoomList() {
     (await classroomService.deleteClassRoom(id)).subscribe({
       next: () => {
         setClasses((prevClasses) =>
-          prevClasses.filter((cat) => cat._id !== id)
+          prevClasses.filter((cat) => cat._id !== id),
         );
         Toast.show({
           type: 'success',
@@ -126,7 +126,7 @@ export default function ClassRoomList() {
           text2: 'Classroom deleted successfully.',
         });
       },
-      error: (error) => {
+      error: () => {
         Toast.show({
           type: 'error',
           text1: 'Error',

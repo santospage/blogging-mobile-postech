@@ -7,7 +7,11 @@ import { styles } from './styles';
 import { ClassRoomModel } from '../../interfaces/Classes/Classes';
 import { classroomService } from '../../services/Classes/ClassRoomService';
 
-export default function ListClasses({ navigation }: any) {
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+
+export default function ListClasses() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const navigation = useNavigation<NavigationProp<any>>();
   const [searchText, setSearchText] = useState('');
   const [classes, setClasses] = useState<ClassRoomModel[]>([]);
 
@@ -24,7 +28,7 @@ export default function ListClasses({ navigation }: any) {
 
   // Filter classes
   const filteredClasses = classes.filter((classItem) =>
-    classItem.resume.toLowerCase().includes(searchText.toLowerCase())
+    classItem.resume.toLowerCase().includes(searchText.toLowerCase()),
   );
 
   return (

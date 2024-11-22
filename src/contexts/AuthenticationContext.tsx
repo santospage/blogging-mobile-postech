@@ -8,7 +8,7 @@ import {
 } from '../interfaces/Authentication/Authentication';
 
 export const AuthenticationContext = createContext<AuthContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export function AuthentuicationProvider({

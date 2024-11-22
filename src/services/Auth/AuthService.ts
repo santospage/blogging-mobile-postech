@@ -18,8 +18,8 @@ export const authService = {
           headers: {
             'Content-Type': 'application/json',
           },
-        }
-      )
+        },
+      ),
     ).pipe(
       map((response) => {
         if (response.data.token) {
@@ -35,10 +35,10 @@ export const authService = {
           () =>
             new Error(
               error.response?.data?.message ||
-                'Failed to authenticate. Please try again later.'
-            )
+                'Failed to authenticate. Please try again later.',
+            ),
         );
-      })
+      }),
     );
   },
 };

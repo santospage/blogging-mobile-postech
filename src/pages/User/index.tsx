@@ -47,7 +47,7 @@ export default function UserList() {
           text2: 'User created successfully',
         });
       },
-      error: (error) => {
+      error: () => {
         Toast.show({
           type: 'error',
           text1: 'Error',
@@ -70,8 +70,8 @@ export default function UserList() {
                   email: savedUser.email,
                   password: savedUser.password,
                 }
-              : cat
-          )
+              : cat,
+          ),
         );
 
         closeModal();
@@ -81,7 +81,7 @@ export default function UserList() {
           text2: 'User updated successfully',
         });
       },
-      error: (error) => {
+      error: () => {
         Toast.show({
           type: 'error',
           text1: 'Error',
@@ -103,7 +103,7 @@ export default function UserList() {
           onPress: () => handleDeleteUser(id),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
@@ -117,7 +117,7 @@ export default function UserList() {
           text2: 'User deleted successfully.',
         });
       },
-      error: (error) => {
+      error: () => {
         Toast.show({
           type: 'error',
           text1: 'Error',

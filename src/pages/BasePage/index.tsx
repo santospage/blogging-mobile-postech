@@ -1,13 +1,9 @@
-import React, {ReactNode} from 'react';
-import {ImageBackground, View} from 'react-native';
+import { ImageBackground, View } from 'react-native';
 
-import {styles} from './styles';
+import { styles } from './styles';
+import { PaginaBaseProps } from '../../interfaces/BasePage/BasePage';
 
-type PaginaBaseProps = {
-  children: ReactNode;
-};
-
-export default function PaginaBase({children}: PaginaBaseProps) {
+export default function PaginaBase({ children }: PaginaBaseProps) {
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -16,7 +12,8 @@ export default function PaginaBase({children}: PaginaBaseProps) {
           resizeMode: 'cover',
           height: 300,
           top: 0,
-        }}>
+        }}
+      >
         {children}
       </ImageBackground>
     </View>

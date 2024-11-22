@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { styles } from './styles';
 import BasePage from '../BasePage';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Logout({ navigation }: any) {
   const handleLogout = async () => {
     // Clear authentications information
@@ -37,6 +38,7 @@ export default function Logout({ navigation }: any) {
         >
           <View style={styles.contentContainer}>
             <Image
+              // eslint-disable-next-line @typescript-eslint/no-require-imports
               source={require('../../../assets/logo.png')}
               style={styles.image}
             />

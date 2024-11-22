@@ -12,17 +12,17 @@ export default function CategoryList() {
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [isModalVisible, setModalVisible] = useState<boolean>(false);
   const [currentCategory, setCurrentCategory] = useState<CategoryModel | null>(
-    null
+    null,
   );
 
   useEffect(() => {
     const subscription = categoryService.getCategories().subscribe({
       next: (data) => setCategories(data),
-      error: (error) => {
+      error: () => {
         Toast.show({
           type: 'error',
           text1: 'Failed to load categories',
-          text2: error.toString(),
+          text2: 'An error occurred while loading categories.',
         });
       },
     });
@@ -33,9 +33,8 @@ export default function CategoryList() {
   const handleAddCategory = async (newCategory: Omit<CategoryModel, '_id'>) => {
     (await categoryService.postCategory(newCategory)).subscribe({
       next: (savedCategory) => {
-        const categoryToAdd = savedCategory.id;
         setCategories((prevCategories) => {
-          return [...prevCategories, categoryToAdd];
+          return [...prevCategories, savedCategory];
         });
 
         closeModal();
@@ -45,7 +44,7 @@ export default function CategoryList() {
           text2: 'Category created successfully',
         });
       },
-      error: (error) => {
+      error: () => {
         Toast.show({
           type: 'error',
           text1: 'Error',
@@ -62,8 +61,8 @@ export default function CategoryList() {
           prevCategories.map((cat) =>
             cat._id === savedCategory._id
               ? { ...cat, name: savedCategory.name }
-              : cat
-          )
+              : cat,
+          ),
         );
 
         closeModal();
@@ -73,7 +72,7 @@ export default function CategoryList() {
           text2: 'Category updated successfully',
         });
       },
-      error: (error) => {
+      error: () => {
         Toast.show({
           type: 'error',
           text1: 'Error',
@@ -95,7 +94,7 @@ export default function CategoryList() {
           onPress: () => handleDeleteCategory(id),
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
@@ -103,7 +102,7 @@ export default function CategoryList() {
     (await categoryService.deleteCategory(id)).subscribe({
       next: () => {
         setCategories((prevCategories) =>
-          prevCategories.filter((cat) => cat._id !== id)
+          prevCategories.filter((cat) => cat._id !== id),
         );
         Toast.show({
           type: 'success',
@@ -111,7 +110,7 @@ export default function CategoryList() {
           text2: 'Category deleted successfully.',
         });
       },
-      error: (error) => {
+      error: () => {
         Toast.show({
           type: 'error',
           text1: 'Error',

@@ -12,9 +12,9 @@ export const classroomService = {
       catchError((error) => {
         console.error('Failed to load classes:', error);
         return throwError(
-          () => new Error('Failed to load classes. Please try again later.')
+          () => new Error('Failed to load classes. Please try again later.'),
         );
-      })
+      }),
     );
   },
 
@@ -27,7 +27,7 @@ export const classroomService = {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      })
+      }),
     ).pipe(
       map((response) => response.data),
       catchError((error) => {
@@ -36,10 +36,10 @@ export const classroomService = {
           () =>
             new Error(
               error.response?.data?.message ||
-                'Failed to load classes. Please try again later.'
-            )
+                'Failed to load classes. Please try again later.',
+            ),
         );
-      })
+      }),
     );
   },
 
@@ -52,7 +52,7 @@ export const classroomService = {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      })
+      }),
     ).pipe(
       map((response) => response.data),
       catchError((error) => {
@@ -61,15 +61,15 @@ export const classroomService = {
           () =>
             new Error(
               error.response?.data?.message ||
-                'Failed to create classroom. Please try again later.'
-            )
+                'Failed to create classroom. Please try again later.',
+            ),
         );
-      })
+      }),
     );
   },
 
   putClassRoom: async (
-    classRoom: ClassRoomModel
+    classRoom: ClassRoomModel,
   ): Promise<Observable<ClassRoomModel>> => {
     const token = await tokenService.get();
 
@@ -79,7 +79,7 @@ export const classroomService = {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      })
+      }),
     ).pipe(
       map((response) => {
         const updatedCLassRoom = response.data.id || response.data;
@@ -91,10 +91,10 @@ export const classroomService = {
           () =>
             new Error(
               error.response?.data?.message ||
-                'Failed to update classroom. Please try again later.'
-            )
+                'Failed to update classroom. Please try again later.',
+            ),
         );
-      })
+      }),
     );
   },
 
@@ -107,7 +107,7 @@ export const classroomService = {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      })
+      }),
     ).pipe(
       map(() => {
         return;
@@ -115,9 +115,10 @@ export const classroomService = {
       catchError((error) => {
         console.error('Failed to delete classroom:', error);
         return throwError(
-          () => new Error('Failed to delete classroom. Please try again later.')
+          () =>
+            new Error('Failed to delete classroom. Please try again later.'),
         );
-      })
+      }),
     );
   },
 };

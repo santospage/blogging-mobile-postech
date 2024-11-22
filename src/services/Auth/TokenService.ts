@@ -11,10 +11,10 @@ export const tokenService = {
       await AsyncStorage.setItem('ACCESS_TOKEN_KEY', accessToken);
       await AsyncStorage.setItem(
         'TOKEN_EXPIRATION_KEY',
-        expirationTime.toString()
+        expirationTime.toString(),
       );
-    } catch (error) {
-      console.error('Error saving token:', error);
+    } catch {
+      console.error('Error saving token:');
     }
   },
 
@@ -24,8 +24,8 @@ export const tokenService = {
       const token = await AsyncStorage.getItem('ACCESS_TOKEN_KEY');
 
       return token;
-    } catch (error) {
-      console.error('Error when obtaining token:', error);
+    } catch {
+      console.error('Error when obtaining token:');
       return '';
     }
   },
@@ -35,8 +35,8 @@ export const tokenService = {
     try {
       await AsyncStorage.removeItem('ACCESS_TOKEN_KEY');
       await AsyncStorage.removeItem('TOKEN_EXPIRATION_KEY');
-    } catch (error) {
-      console.error('Error removing token:', error);
+    } catch {
+      console.error('Error removing token:');
     }
   },
 
@@ -48,7 +48,7 @@ export const tokenService = {
       return (
         expirationTime !== null && currentTime <= parseInt(expirationTime, 10)
       );
-    } catch (error) {
+    } catch {
       return false;
     }
   },

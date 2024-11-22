@@ -8,7 +8,6 @@ import { styles } from './styles';
 import {
   ClassRoom,
   ClassRoomFormProps,
-  ClassRoomModel,
 } from '../../../interfaces/Classes/Classes';
 import { CategoryModel } from '../../../interfaces/Category/Category';
 import { categoryService } from '../../../services/Category/CategoryService';
@@ -33,7 +32,7 @@ export default function CategoryForm({
     const subscription = categoryService.getCategories().subscribe({
       next: (data) =>
         setCategories(
-          data.map((category) => ({ ...category, _id: category._id || '' }))
+          data.map((category) => ({ ...category, _id: category._id || '' })),
         ),
       error: (error) => {
         Toast.show({
@@ -55,13 +54,15 @@ export default function CategoryForm({
       const currentDate = new Date().toISOString();
 
       setUser(
-        typeof classRoom?.user === 'string' ? classRoom.user : currentUser || ''
+        typeof classRoom?.user === 'string'
+          ? classRoom.user
+          : currentUser || '',
       );
       setIdUser(idUser || '');
       setUpdatedAt(
         classRoom?.updatedAt
           ? new Date(classRoom.updatedAt).toLocaleDateString('pt-BR')
-          : new Date(currentDate).toLocaleDateString('pt-BR')
+          : new Date(currentDate).toLocaleDateString('pt-BR'),
       );
     }
 

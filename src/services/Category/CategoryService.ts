@@ -15,10 +15,10 @@ export const categoryService = {
           () =>
             new Error(
               error.response?.data?.message ||
-                'Failed to load categories. Please try again later.'
-            )
+                'Failed to load categories. Please try again later.',
+            ),
         );
-      })
+      }),
     );
   },
 
@@ -31,7 +31,7 @@ export const categoryService = {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      })
+      }),
     ).pipe(
       map((response) => response.data),
       catchError((error) => {
@@ -40,15 +40,15 @@ export const categoryService = {
           () =>
             new Error(
               error.response?.data?.message ||
-                'Failed to create category. Please try again later.'
-            )
+                'Failed to create category. Please try again later.',
+            ),
         );
-      })
+      }),
     );
   },
 
   putCategory: async (
-    category: CategoryModel
+    category: CategoryModel,
   ): Promise<Observable<CategoryModel>> => {
     const token = await tokenService.get();
 
@@ -58,7 +58,7 @@ export const categoryService = {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      })
+      }),
     ).pipe(
       map((response) => {
         const updatedCategory = response.data.id || response.data;
@@ -70,10 +70,10 @@ export const categoryService = {
           () =>
             new Error(
               error.response?.data?.message ||
-                'Failed to update category. Please try again later.'
-            )
+                'Failed to update category. Please try again later.',
+            ),
         );
-      })
+      }),
     );
   },
 
@@ -86,7 +86,7 @@ export const categoryService = {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      })
+      }),
     ).pipe(
       map(() => {
         return;
@@ -94,9 +94,9 @@ export const categoryService = {
       catchError((error) => {
         console.error('Failed to delete category:', error);
         return throwError(
-          () => new Error('Failed to delete category. Please try again later.')
+          () => new Error('Failed to delete category. Please try again later.'),
         );
-      })
+      }),
     );
   },
 };

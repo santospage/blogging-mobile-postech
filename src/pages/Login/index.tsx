@@ -27,7 +27,7 @@ export default function Login({ navigation }: Props) {
       (await userService.getUsers()).subscribe({
         next: async (response) => {
           const selectedUser = response.find(
-            (user: UserModel) => user.user === userName
+            (user: UserModel) => user.user === userName,
           );
 
           if (selectedUser) {
@@ -79,13 +79,13 @@ export default function Login({ navigation }: Props) {
     await AsyncStorage.setItem('TOKEN_EXPIRATION_KEY', '');
 
     authService.login(loginData).subscribe({
-      next: async (response) => {
+      next: async () => {
         onChangeNome('');
         onChangeSenha('');
         await fetchUsers(user);
         navigation.navigate('Drawer');
       },
-      error: (error: any) => {
+      error: () => {
         Toast.show({
           type: 'error',
           position: 'top',
@@ -106,6 +106,7 @@ export default function Login({ navigation }: Props) {
         >
           <View style={styles.contentContainer}>
             <Image
+              // eslint-disable-next-line @typescript-eslint/no-require-imports
               source={require('../../../assets/logo.png')}
               style={styles.image1}
             />
@@ -135,6 +136,7 @@ export default function Login({ navigation }: Props) {
               <Text style={styles.textoBotao}>Confirm</Text>
             </TouchableOpacity>
             <Image
+              // eslint-disable-next-line @typescript-eslint/no-require-imports
               source={require('../../../assets/login.png')}
               style={styles.image2}
             />
