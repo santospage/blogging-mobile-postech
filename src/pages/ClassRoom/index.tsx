@@ -1,30 +1,14 @@
 import React from 'react';
-import {
-  View,
-  ScrollView,
-  Image,
-  Text,
-  ImageSourcePropType,
-} from 'react-native';
-
+import { View, ScrollView, Image, Text } from 'react-native';
 import BasePage from '../BasePage';
 import { useRoute, RouteProp } from '@react-navigation/native';
-import { styles } from './styles';
 
-type RouteParams = {
-  params: {
-    title: string;
-    detail: string;
-    resume: string;
-    image: ImageSourcePropType;
-    responsible: string;
-    published: string;
-  };
-};
+import { styles } from './styles';
+import { ClassRoomParams } from '../../interfaces/Classes/Classes';
 
 export default function ClassRoom() {
-  const rotas = useRoute<RouteProp<RouteParams, 'params'>>();
-  const { title, detail, image, responsible, published } = rotas.params;
+  const rotas = useRoute<RouteProp<ClassRoomParams, 'params'>>();
+  const { title, detail, image, user, updatedAt } = rotas.params;
 
   return (
     <View style={styles.container}>
@@ -33,9 +17,18 @@ export default function ClassRoom() {
           <View style={styles.contentContainer}>
             <Text style={styles.text}>{title}</Text>
             <Text style={styles.textList}>{detail}</Text>
-            <Image source={image} style={styles.image} />
-            <Text style={styles.textList}>Responsible: {responsible}</Text>
-            <Text style={styles.textList}>Published: {published}</Text>
+            {image ? (
+              <Image source={{ uri: image }} style={styles.image} />
+            ) : (
+              <Text style={styles.textList}>No image available</Text>
+            )}
+            <Text style={styles.textList}>Responsible: {user?.user}</Text>
+            <Text style={styles.textList}>
+              Date:{' '}
+              {updatedAt
+                ? new Intl.DateTimeFormat('pt-BR').format(new Date(updatedAt))
+                : 'No date available'}
+            </Text>
           </View>
         </BasePage>
       </ScrollView>

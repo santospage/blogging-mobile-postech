@@ -1,22 +1,9 @@
 import React from 'react';
 import { Image, Text, View, TouchableOpacity } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
 
 import { styles } from './styles';
 import BasePage from '../BasePage';
-
-export type RootStackParamList = {
-  Home: undefined;
-  Login: undefined;
-  Cadastro: undefined;
-  Drawer: undefined;
-};
-
-type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
-
-type Props = {
-  navigation: HomeScreenNavigationProp;
-};
+import { Props } from '../../interfaces/Home/Home';
 
 export default function Home({ navigation }: Props) {
   return (
@@ -24,6 +11,7 @@ export default function Home({ navigation }: Props) {
       <BasePage>
         <View style={styles.contentContainer}>
           <Image
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             source={require('../../../assets/logo.png')}
             style={styles.imagem}
           />

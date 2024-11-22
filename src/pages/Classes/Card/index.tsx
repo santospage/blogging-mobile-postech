@@ -1,26 +1,17 @@
 import React from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
+
 import { styles } from '../Card/styles';
+import { ClassRoomModel } from '../../../interfaces/Classes/Classes';
 
-interface CardProps {
-  title: string;
-  detail: string;
-  resume: string;
-  image: any;
-  responsible: string;
-  published: string;
-  navigation: {
-    navigate: (screen: string, params?: Record<string, any>) => void;
-  };
-}
-
-export const Card: React.FC<CardProps> = ({
+export const Card: React.FC<ClassRoomModel> = ({
   title,
   detail,
   resume,
   image,
-  responsible,
-  published,
+  category,
+  updatedAt,
+  user,
   navigation,
 }) => {
   return (
@@ -32,12 +23,13 @@ export const Card: React.FC<CardProps> = ({
             detail: detail,
             resume: resume,
             image: image,
-            responsible,
-            published,
+            category: category,
+            updatedAt: updatedAt,
+            user: user,
           })
         }
       >
-        <Image source={image} style={styles.image} />
+        {image ? <Image source={{ uri: image }} style={styles.image} /> : null}
       </TouchableOpacity>
       <View style={styles.containerInformacoes}>
         <Text style={styles.resume}>{resume}</Text>

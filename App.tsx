@@ -1,6 +1,9 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { useFonts, Poppins_400Regular } from '@expo-google-fonts/poppins';
+import { AuthentuicationProvider } from './src/contexts/AuthenticationContext';
+import Toast from 'react-native-toast-message';
+
 import Navigation from './src/routes/navigation';
 
 export default function App(): JSX.Element | null {
@@ -12,5 +15,10 @@ export default function App(): JSX.Element | null {
     return null;
   }
 
-  return <Navigation />;
+  return (
+    <AuthentuicationProvider>
+      <Navigation />
+      <Toast />
+    </AuthentuicationProvider>
+  );
 }
