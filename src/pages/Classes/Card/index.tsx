@@ -23,13 +23,13 @@ export const Card: React.FC<ClassRoomModel> = ({
             detail: detail,
             resume: resume,
             image: image,
-            category: category.name,
+            category: category,
             updatedAt: updatedAt,
             user: user,
           })
         }
       >
-        <Image source={{ uri: image }} style={styles.image} />
+        {image ? <Image source={{ uri: image }} style={styles.image} /> : null}
       </TouchableOpacity>
       <View style={styles.containerInformacoes}>
         <Text style={styles.resume}>{resume}</Text>

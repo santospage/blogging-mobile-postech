@@ -16,6 +16,7 @@ export default function Logout({ navigation }: any) {
     // Clear authentications information
     await AsyncStorage.setItem('ACCESS_TOKEN_KEY', '');
     await AsyncStorage.setItem('USER_SESSION', '');
+    await AsyncStorage.setItem('USER_ID', '');
     await AsyncStorage.setItem('TOKEN_EXPIRATION_KEY', '');
 
     // Home navigation

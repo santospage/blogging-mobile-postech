@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text } from 'react-native';
+import Toast from 'react-native-toast-message';
+
 import { styles } from './styles';
 import { UserFormProps } from '../../../interfaces/User/User';
 
@@ -15,6 +17,34 @@ export default function UserForm({ user, onSave, onClose }: UserFormProps) {
     setEmail(user?.email || '');
     setPassword(user?.password || '');
   }, [user]);
+
+  // Validations
+  if (!currentUser) {
+    Toast.show({
+      type: 'error',
+      text1: 'Erro',
+      text2: 'User is mandatory!',
+    });
+    return;
+  }
+
+  if (!fullName) {
+    Toast.show({
+      type: 'error',
+      text1: 'Erro',
+      text2: 'FullName is mandatory!',
+    });
+    return;
+  }
+
+  if (!password) {
+    Toast.show({
+      type: 'error',
+      text1: 'Erro',
+      text2: 'Password is mandatory!',
+    });
+    return;
+  }
 
   const handleSave = () => {
     if (user) {

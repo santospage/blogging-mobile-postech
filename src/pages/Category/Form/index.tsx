@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text } from 'react-native';
+import Toast from 'react-native-toast-message';
+
 import { styles } from './styles';
 import { CategoryFormProps } from '../../../interfaces/Category/Category';
 
@@ -13,6 +15,16 @@ export default function CategoryForm({
   useEffect(() => {
     setName(category?.name || '');
   }, [category]);
+
+  // Validation
+  if (!name) {
+    Toast.show({
+      type: 'error',
+      text1: 'Erro',
+      text2: 'Name is mandatory!',
+    });
+    return;
+  }
 
   const handleSave = () => {
     if (category) {

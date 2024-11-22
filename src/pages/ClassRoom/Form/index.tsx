@@ -1,76 +1,104 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, TouchableOpacity, Text, Alert } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Picker } from '@react-native-picker/picker';
+import Toast from 'react-native-toast-message';
 
-import { styles } from '../Form/styles';
+import { styles } from './styles';
 import {
+  ClassRoom,
   ClassRoomFormProps,
   ClassRoomModel,
 } from '../../../interfaces/Classes/Classes';
+import { CategoryModel } from '../../../interfaces/Category/Category';
+import { categoryService } from '../../../services/Category/CategoryService';
 
-export default function ClassRoomForm({
+export default function CategoryForm({
   classRoom,
   onSave,
   onClose,
 }: ClassRoomFormProps) {
-  const [classRoomData, setClassRoomData] = useState<
-    Pick<
-      ClassRoomModel,
-      | 'title'
-      | 'detail'
-      | 'resume'
-      | 'category'
-      | 'user'
-      | 'updatedAt'
-      | 'image'
-    >
-  >({
-    title: '',
-    detail: '',
-    resume: '',
-    category: { name: '' },
-    user: { user: '' },
-    updatedAt: '',
-    image: '',
-  });
+  const [title, setTitle] = useState('');
+  const [resume, setResume] = useState('');
+  const [detail, setDetail] = useState('');
+  const [categoryId, setCategoryId] = useState<string>('');
+  const [categories, setCategories] = useState<CategoryModel[]>([]);
+  const [user, setUser] = useState('');
+  const [idUser, setIdUser] = useState('');
+  const [image, setImage] = useState('');
+  const [updatedAt, setUpdatedAt] = useState('');
 
+  // Fetch categories
   useEffect(() => {
-    if (classRoom) {
-      setClassRoomData({
-        title: classRoom.title,
-        detail: classRoom.detail,
-        resume: classRoom.resume,
-        category: { name: classRoom.category.name },
-        user: classRoom.user,
-        updatedAt: classRoom.updatedAt,
-        image: classRoom.image,
-      });
-    } else {
-      setClassRoomData({
-        title: '',
-        detail: '',
-        resume: '',
-        category: { name: '' },
-        user: { user: '' },
-        updatedAt: '',
-        image: '',
-      });
+    const subscription = categoryService.getCategories().subscribe({
+      next: (data) =>
+        setCategories(
+          data.map((category) => ({ ...category, _id: category._id || '' }))
+        ),
+      error: (error) => {
+        Toast.show({
+          type: 'error',
+          text1: 'Error loading categories',
+          text2: error.message || 'Try again later.',
+        });
+      },
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Set default values
+  useEffect(() => {
+    async function fetchDefaults() {
+      const currentUser = await AsyncStorage.getItem('USER_SESSION');
+      const idUser = await AsyncStorage.getItem('USER_ID');
+      const currentDate = new Date().toISOString();
+
+      setUser(
+        typeof classRoom?.user === 'string' ? classRoom.user : currentUser || ''
+      );
+      setIdUser(idUser || '');
+      setUpdatedAt(
+        classRoom?.updatedAt
+          ? new Date(classRoom.updatedAt).toLocaleDateString('pt-BR')
+          : new Date(currentDate).toLocaleDateString('pt-BR')
+      );
     }
+
+    fetchDefaults();
+
+    setTitle(classRoom?.title || '');
+    setResume(classRoom?.resume || '');
+    setDetail(classRoom?.detail || '');
+    setCategoryId(classRoom?._id || '');
+    setImage(classRoom?.image || '');
   }, [classRoom]);
 
-  const handleSave = () => {
-    if (
-      classRoomData.title &&
-      classRoomData.detail &&
-      classRoomData.resume &&
-      classRoomData.category
-    ) {
-      const newClassRoom = classRoom
-        ? { ...classRoom, ...classRoomData }
-        : { ...classRoomData, _id: Date.now().toString() };
-      onSave(newClassRoom);
-    } else {
-      Alert.alert('Alert', 'Fill in all fields');
+  const handleSave = async () => {
+    // Validations
+    if (!title || !resume || !detail || !categoryId) {
+      Toast.show({
+        type: 'error',
+        position: 'top',
+        text1: 'Error',
+        text2: 'All fields are mandatory!',
+        visibilityTime: 3000,
+      });
+      return;
     }
+
+    const formData: ClassRoom = {
+      ...classRoom,
+      title,
+      resume,
+      detail,
+      category: categoryId,
+      user: idUser,
+      date: Date.now().toString(),
+      image,
+    };
+
+    onSave(formData);
   };
 
   return (
@@ -80,21 +108,8 @@ export default function ClassRoomForm({
         <TextInput
           style={styles.input}
           placeholder="Title"
-          value={classRoomData.title}
-          onChangeText={(text) =>
-            setClassRoomData({ ...classRoomData, title: text })
-          }
-        />
-      </View>
-      <View style={styles.inputRow}>
-        <Text style={styles.label}>Detail:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Detail"
-          value={classRoomData.detail}
-          onChangeText={(text) =>
-            setClassRoomData({ ...classRoomData, detail: text })
-          }
+          value={title}
+          onChangeText={setTitle}
         />
       </View>
       <View style={styles.inputRow}>
@@ -102,32 +117,40 @@ export default function ClassRoomForm({
         <TextInput
           style={styles.input}
           placeholder="Resume"
-          value={classRoomData.resume}
-          onChangeText={(text) =>
-            setClassRoomData({ ...classRoomData, resume: text })
-          }
+          value={resume}
+          onChangeText={setResume}
+        />
+      </View>
+      <View style={styles.inputRow}>
+        <Text style={styles.label}>Detail:</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Detail"
+          value={detail}
+          onChangeText={setDetail}
         />
       </View>
       <View style={styles.inputRow}>
         <Text style={styles.label}>Category:</Text>
-        <TextInput
+        <Picker
+          selectedValue={categoryId}
+          onValueChange={(itemValue) => setCategoryId(itemValue)}
           style={styles.input}
-          placeholder="Category"
-          value={classRoomData.category.name}
-          onChangeText={(text) =>
-            setClassRoomData({ ...classRoomData, category: { name: text } })
-          }
-        />
+        >
+          <Picker.Item label="Select a category" value="" />
+          {categories.map((cat) => (
+            <Picker.Item key={cat._id} label={cat.name} value={cat._id} />
+          ))}
+        </Picker>
       </View>
       <View style={styles.inputRow}>
-        <Text style={styles.label}>Responsible:</Text>
+        <Text style={styles.label}>User:</Text>
         <TextInput
           style={styles.input}
-          placeholder="Responsible"
-          value={classRoomData.user.user}
-          onChangeText={(text) =>
-            setClassRoomData({ ...classRoomData, user: { user: text } })
-          }
+          placeholder="User"
+          value={user}
+          onChangeText={setUser}
+          editable={false}
         />
       </View>
       <View style={styles.inputRow}>
@@ -135,16 +158,7 @@ export default function ClassRoomForm({
         <TextInput
           style={styles.input}
           placeholder="Date"
-          value={
-            classRoomData.updatedAt
-              ? new Intl.DateTimeFormat('pt-BR').format(
-                  new Date(classRoomData.updatedAt)
-                )
-              : ''
-          }
-          onChangeText={(text) =>
-            setClassRoomData({ ...classRoomData, updatedAt: text })
-          }
+          value={updatedAt}
           editable={false}
         />
       </View>
@@ -153,10 +167,9 @@ export default function ClassRoomForm({
         <TextInput
           style={styles.input}
           placeholder="Image"
-          value={classRoomData.image}
-          onChangeText={(text) =>
-            setClassRoomData({ ...classRoomData, image: text })
-          }
+          value={image}
+          onChangeText={setImage}
+          editable={true}
         />
       </View>
       <View style={styles.buttonContainer}>

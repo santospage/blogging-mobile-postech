@@ -22,6 +22,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 18,
     textAlign: 'left',
+    marginTop: 30,
   },
   image: {
     width: 370,

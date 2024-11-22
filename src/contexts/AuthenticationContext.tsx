@@ -29,6 +29,7 @@ export function AuthentuicationProvider({
 
   const logout = async () => {
     await AsyncStorage.removeItem('USER_SESSION');
+    await AsyncStorage.removeItem('USER_ID');
     await AsyncStorage.removeItem('ACCESS_TOKEN_KEY');
 
     setUser('');
@@ -47,6 +48,7 @@ export function AuthentuicationProvider({
         setLogged(true);
       } else {
         await AsyncStorage.removeItem('USER_SESSION');
+        await AsyncStorage.removeItem('USER_ID');
         await AsyncStorage.removeItem('ACCESS_TOKEN_KEY');
         setUser('');
         setToken('');

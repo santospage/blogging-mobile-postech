@@ -42,7 +42,7 @@ export default function ListClasses({ navigation }: any) {
           />
           <FlatList
             data={filteredClasses}
-            keyExtractor={(item) => item._id}
+            keyExtractor={(item) => item._id!}
             renderItem={({ item }) => (
               <Card {...item} navigation={navigation} />
             )}

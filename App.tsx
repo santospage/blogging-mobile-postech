@@ -1,9 +1,10 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { useFonts, Poppins_400Regular } from '@expo-google-fonts/poppins';
+import { AuthentuicationProvider } from './src/contexts/AuthenticationContext';
+import Toast from 'react-native-toast-message';
 
 import Navigation from './src/routes/navigation';
-import { AuthentuicationProvider } from './src/contexts/AuthenticationContext';
 
 export default function App(): JSX.Element | null {
   const [fontsLoaded, fontError] = useFonts({
@@ -17,6 +18,13 @@ export default function App(): JSX.Element | null {
   return (
     <AuthentuicationProvider>
       <Navigation />
+      <Toast
+        config={{
+          topOffset: () => 30,
+          visibilityTime: () => 3000,
+          zIndex: () => 9999,
+        }}
+      />
     </AuthentuicationProvider>
-  )
+  );
 }

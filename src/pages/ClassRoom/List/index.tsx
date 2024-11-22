@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import Modal from 'react-native-modal';
+import Toast from 'react-native-toast-message';
 
 import ClassRoomForm from '../Form';
 import { styles } from './styles';
@@ -14,41 +15,90 @@ export default function ClassRoomList() {
     useState<ClassRoomModel | null>(null);
 
   useEffect(() => {
-    const subscription = classroomService.getClasses().subscribe({
-      next: (data) => setClasses(data),
-      error: (error) => {
-        Alert.alert('Alert', error);
-      },
-    });
+    const fetchData = async () => {
+      const subscription = (
+        await classroomService.getClassesManagerial()
+      ).subscribe({
+        next: (data: ClassRoomModel[]) => setClasses(data),
+        error: (error: any) => {
+          Toast.show({
+            type: 'error',
+            text1: 'Failed to load classes',
+            text2: error.toString(),
+          });
+        },
+      });
 
-    return () => subscription.unsubscribe();
+      return () => subscription.unsubscribe();
+    };
+
+    fetchData();
   }, []);
 
-  const handleAddClassRoom = (newClassRoom: ClassRoomModel) => {
-    const newClassRoomModel: ClassRoomModel = {
-      ...newClassRoom,
-      title: '',
-      detail: '',
-      resume: '',
-      image: '',
-      updatedAt: '',
-      category: { name: '' },
-      user: { user: '' },
-    };
-    setClasses([...classes, newClassRoomModel]);
-    closeModal();
+  const handleAddClassRoom = async (
+    newClassRoom: Omit<ClassRoomModel, '_id'>
+  ) => {
+    (await classroomService.postClassRoom(newClassRoom)).subscribe({
+      next: (savedClassRoom) => {
+        const classRoomToAdd = savedClassRoom.id;
+        setClasses((prevClasses) => {
+          return [...prevClasses, classRoomToAdd];
+        });
+
+        closeModal();
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'ClassRoom created successfully',
+        });
+      },
+      error: (error) => {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Failed to create classroom.',
+        });
+      },
+    });
   };
 
-  const handleEditClassRoom = (updatedClassRoom: ClassRoomModel) => {
-    setClasses(
-      classes.map((u) =>
-        u._id === updatedClassRoom._id ? updatedClassRoom : u
-      )
-    );
-    closeModal();
+  const handleEditClassRoom = async (updatedClassRoom: ClassRoomModel) => {
+    (await classroomService.putClassRoom(updatedClassRoom)).subscribe({
+      next: (savedClassRoom) => {
+        setClasses((prevClasses) =>
+          prevClasses.map((cat) =>
+            cat._id === savedClassRoom._id
+              ? {
+                  ...cat,
+                  title: savedClassRoom.title,
+                  resume: savedClassRoom.resume,
+                  detail: savedClassRoom.detail,
+                  category: savedClassRoom.category,
+                  user: savedClassRoom.user,
+                  image: savedClassRoom.image,
+                }
+              : cat
+          )
+        );
+
+        closeModal();
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Classroom updated successfully',
+        });
+      },
+      error: (error) => {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Failed to update classroom.',
+        });
+      },
+    });
   };
 
-  const confirmDeleteClassRoom = (id: string) => {
+  const confirmDeleteCLassRoom = (id: string) => {
     Alert.alert(
       'Confirmation',
       'Are you sure you want to delete this classroom?',
@@ -64,12 +114,30 @@ export default function ClassRoomList() {
     );
   };
 
-  const handleDeleteClassRoom = (id: string) => {
-    setClasses(classes.filter((u) => u._id !== id));
+  const handleDeleteClassRoom = async (id: string) => {
+    (await classroomService.deleteClassRoom(id)).subscribe({
+      next: () => {
+        setClasses((prevClasses) =>
+          prevClasses.filter((cat) => cat._id !== id)
+        );
+        Toast.show({
+          type: 'success',
+          text1: 'Deleted',
+          text2: 'Classroom deleted successfully.',
+        });
+      },
+      error: (error) => {
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Failed to delete classroom.',
+        });
+      },
+    });
   };
 
-  const openModal = (user: ClassRoomModel | null = null) => {
-    setCurrentClassRoom(user);
+  const openModal = (classRoom: ClassRoomModel | null = null) => {
+    setCurrentClassRoom(classRoom);
     setModalVisible(true);
   };
 
@@ -80,36 +148,18 @@ export default function ClassRoomList() {
 
   const renderItem = ({ item }: { item: ClassRoomModel }) => (
     <View style={styles.classRoomItem}>
+      <Text style={styles.classRoomText}>Title: {item.title}</Text>
+      <Text style={styles.classRoomText}>Resume: {item.resume}</Text>
+      <Text style={styles.classRoomText}>Detail: {item.detail}</Text>
+      <Text style={styles.classRoomText}>Category: {item.category.name}</Text>
+      <Text style={styles.classRoomText}>User: {item.user.user}</Text>
       <Text style={styles.classRoomText}>
-        <Text style={{ fontWeight: 'bold' }}>Title: </Text>
-        {item.title}
-      </Text>
-      <Text style={styles.classRoomText}>
-        <Text style={{ fontWeight: 'bold' }}>Detail: </Text>
-        {item.detail}
-      </Text>
-      <Text style={styles.classRoomText}>
-        <Text style={{ fontWeight: 'bold' }}>Resume: </Text>
-        {item.resume}
-      </Text>
-      <Text style={styles.classRoomText}>
-        <Text style={{ fontWeight: 'bold' }}>Category: </Text>
-        {item.category.name}
-      </Text>
-      <Text style={styles.classRoomText}>
-        <Text style={{ fontWeight: 'bold' }}>Responsible: </Text>
-        {item.user.user}
-      </Text>
-      <Text style={styles.classRoomText}>
-        <Text style={{ fontWeight: 'bold' }}>Date: </Text>
+        Date:{' '}
         {item.updatedAt
-          ? new Intl.DateTimeFormat('pt-BR').format(new Date(item.updatedAt))
-          : 'No date available'}
+          ? new Date(item.updatedAt).toLocaleDateString('pt-BR')
+          : 'N/A'}
       </Text>
-      <Text style={styles.classRoomText}>
-        <Text style={{ fontWeight: 'bold' }}>Image: </Text>
-        {item.image}
-      </Text>
+      <Text style={styles.classRoomText}>Image: {item.image}</Text>
       <View style={styles.actions}>
         <TouchableOpacity
           style={styles.actionButton}
@@ -119,7 +169,7 @@ export default function ClassRoomList() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.actionButton}
-          onPress={() => confirmDeleteClassRoom(item._id)}
+          onPress={() => confirmDeleteCLassRoom(item._id!)}
         >
           <Text style={styles.actionButtonText}>Delete</Text>
         </TouchableOpacity>
@@ -131,7 +181,7 @@ export default function ClassRoomList() {
     <View style={styles.container}>
       <FlatList
         data={classes}
-        keyExtractor={(item) => item._id.toString()}
+        keyExtractor={(item) => item._id!}
         renderItem={renderItem}
       />
       <TouchableOpacity style={styles.addButton} onPress={() => openModal()}>

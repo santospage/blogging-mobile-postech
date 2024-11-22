@@ -1,16 +1,29 @@
 export type ClassRoomModel = {
-  _id: string;
+  _id?: string;
   title: string;
-  detail?: string;
   resume: string;
-  image?: string;
-  updatedAt: string;
+  detail?: string;
+  updatedAt?: string;
   category: {
-    name: string;
+    name?: string;
   };
   user: {
     user: string;
   };
+  image?: string;
+  navigation?: any;
+};
+
+export type ClassRoom = {
+  _id?: string;
+  title: string;
+  resume: string;
+  detail?: string;
+  updatedAt?: string;
+  date?: string;
+  category: string;
+  user: string;
+  image?: string;
   navigation?: any;
 };
 
