@@ -17,6 +17,7 @@ export const Card: React.FC<ClassRoomModel> = ({
   return (
     <View style={styles.container}>
       <TouchableOpacity
+        testID="TouchableOpacity"
         onPress={() =>
           navigation.navigate('ClassRoom', {
             title: title,

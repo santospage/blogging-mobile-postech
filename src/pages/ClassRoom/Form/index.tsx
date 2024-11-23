@@ -12,7 +12,7 @@ import {
 import { CategoryModel } from '../../../interfaces/Category/Category';
 import { categoryService } from '../../../services/Category/CategoryService';
 
-export default function CategoryForm({
+export default function ClassRoomForm({
   classRoom,
   onSave,
   onClose,
@@ -134,6 +134,7 @@ export default function CategoryForm({
       <View style={styles.inputRow}>
         <Text style={styles.label}>Category:</Text>
         <Picker
+          testID="category-picker"
           selectedValue={categoryId}
           onValueChange={(itemValue) => setCategoryId(itemValue)}
           style={styles.input}
