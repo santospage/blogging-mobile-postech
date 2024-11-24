@@ -68,7 +68,10 @@
       "!**/node_modules/**",
       "!**/babel.config.js",
       "!**/expo-env.d.ts",
-      "!**/.expo/**"
+      "!**/.expo/**",
+      "!**/.prettierrc.js",
+      "!**/react-native-dotenv.d.ts",
+      "!src/interfaces/**"
     ]
   }
 }

@@ -1,8 +1,7 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render } from '@testing-library/react-native';
 import Login from '../../../src/pages/Login';
 import { NavigationContainer } from '@react-navigation/native';
-import { authService } from '../../../src/services/Auth/AuthService';
 import { LoginScreenNavigationProp } from '../../../src/interfaces/Login/Login';
 
 // Mock de AsyncStorage

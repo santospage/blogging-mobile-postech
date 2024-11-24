@@ -24,7 +24,7 @@ export default function ClassRoomList() {
           Toast.show({
             type: 'error',
             text1: 'Failed to load classes',
-            text2: error.toString(),
+            text2: 'An error occurred while loading classes.',
           });
         },
       });
