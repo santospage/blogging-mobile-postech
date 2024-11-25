@@ -4,7 +4,7 @@ WORKDIR /blogging-mobile-postech
 
 COPY package*.json ./
 
-RUN npm install -g expo-cli && npm install
+RUN npm install -g expo-cli && npm install --legacy-peer-deps
 
 COPY . .
 
