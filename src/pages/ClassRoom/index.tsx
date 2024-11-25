@@ -18,7 +18,11 @@ export default function ClassRoom() {
             <Text style={styles.text}>{title}</Text>
             <Text style={styles.textList}>{detail}</Text>
             {image ? (
-              <Image source={{ uri: image }} style={styles.image} />
+              <Image
+                source={{ uri: image }}
+                style={styles.image}
+                testID="image"
+              />
             ) : (
               <Text style={styles.textList}>No image available</Text>
             )}

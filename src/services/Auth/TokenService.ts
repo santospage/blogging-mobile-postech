@@ -25,7 +25,6 @@ export const tokenService = {
 
       return token;
     } catch {
-      console.error('Error when obtaining token:');
       return '';
     }
   },

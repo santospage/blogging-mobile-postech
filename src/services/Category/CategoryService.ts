@@ -10,7 +10,6 @@ export const categoryService = {
     return from(api.get('/categories')).pipe(
       map((response) => response.data),
       catchError((error) => {
-        console.error('Failed to load categories:', error.response || error);
         return throwError(
           () =>
             new Error(
@@ -35,7 +34,6 @@ export const categoryService = {
     ).pipe(
       map((response) => response.data),
       catchError((error) => {
-        console.error('Failed to create category:', error.response || error);
         return throwError(
           () =>
             new Error(
@@ -65,7 +63,6 @@ export const categoryService = {
         return updatedCategory;
       }),
       catchError((error) => {
-        console.error('Failed to update category:', error.response || error);
         return throwError(
           () =>
             new Error(
@@ -91,8 +88,7 @@ export const categoryService = {
       map(() => {
         return;
       }),
-      catchError((error) => {
-        console.error('Failed to delete category:', error);
+      catchError(() => {
         return throwError(
           () => new Error('Failed to delete category. Please try again later.'),
         );

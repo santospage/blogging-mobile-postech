@@ -9,8 +9,7 @@ export const classroomService = {
   getClasses: (): Observable<ClassRoomModel[]> => {
     return from(api.get('/classes')).pipe(
       map((response) => response.data),
-      catchError((error) => {
-        console.error('Failed to load classes:', error);
+      catchError(() => {
         return throwError(
           () => new Error('Failed to load classes. Please try again later.'),
         );
@@ -31,7 +30,6 @@ export const classroomService = {
     ).pipe(
       map((response) => response.data),
       catchError((error) => {
-        console.error('Failed to load classes:', error.response || error);
         return throwError(
           () =>
             new Error(
@@ -56,7 +54,6 @@ export const classroomService = {
     ).pipe(
       map((response) => response.data),
       catchError((error) => {
-        console.error('Failed to create classroom:', error.response || error);
         return throwError(
           () =>
             new Error(
@@ -86,7 +83,6 @@ export const classroomService = {
         return updatedCLassRoom;
       }),
       catchError((error) => {
-        console.error('Failed to update classroom:', error.response || error);
         return throwError(
           () =>
             new Error(
@@ -112,8 +108,7 @@ export const classroomService = {
       map(() => {
         return;
       }),
-      catchError((error) => {
-        console.error('Failed to delete classroom:', error);
+      catchError(() => {
         return throwError(
           () =>
             new Error('Failed to delete classroom. Please try again later.'),
