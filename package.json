@@ -8,7 +8,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watch --coverage=false",
-    "finaltest": "jest"
+    "finaltest": "jest",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.2.3",
