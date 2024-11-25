@@ -14,6 +14,6 @@ jobs:
           node-version: 20
           cache: 'npm'
       - name: Install the dependencies
-        run: npm ci
+        run: npm install --legacy-peer-deps
       - name: Run the linter
         run: npm run lint
