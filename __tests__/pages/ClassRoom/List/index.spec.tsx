@@ -3,7 +3,6 @@ import { render, waitFor } from '@testing-library/react-native';
 import ClassRoomList from '../../../../src/pages/ClassRoom/List';
 // eslint-disable-next-line max-len
 import { classroomService } from '../../../../src/services/Classes/ClassRoomService';
-import { ClassRoomModel } from '../../../../src/interfaces/Classes/Classes';
 import Toast from 'react-native-toast-message';
 
 // Mocks
@@ -33,19 +32,6 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   removeItem: jest.fn(),
   clear: jest.fn(),
 }));
-
-const mockClasses: ClassRoomModel[] = [
-  {
-    _id: '1',
-    title: 'Class 1',
-    resume: 'Resume 1',
-    detail: 'Detail 1',
-    category: { name: 'Category 1' },
-    user: { user: 'User 1' },
-    updatedAt: '2024-01-01',
-    image: 'image1.jpg',
-  },
-];
 
 describe('ClassRoomList', () => {
   beforeEach(() => {
