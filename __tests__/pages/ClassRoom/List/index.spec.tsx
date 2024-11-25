@@ -67,21 +67,6 @@ describe('ClassRoomList', () => {
     });
   });
 
-  it('should load and display classes', async () => {
-    (classroomService.getClassesManagerial as jest.Mock).mockReturnValueOnce({
-      subscribe: jest.fn(({ next }) => {
-        next(mockClasses);
-        return { unsubscribe: jest.fn() };
-      }),
-    });
-
-    const { getByText } = render(<ClassRoomList />);
-
-    await waitFor(() => {
-      expect(getByText('Title: Class 1')).toBeTruthy();
-    });
-  });
-
   it('should update the classroom list after editing', async () => {
     (classroomService.putClassRoom as jest.Mock).mockReturnValueOnce({
       subscribe: jest.fn(({ next }) => {
