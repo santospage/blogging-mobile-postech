@@ -5,7 +5,7 @@ import api from '../../../src/services/api';
 jest.mock('../../../src/services/api');
 jest.mock('../../../src/services/Auth/TokenService');
 
-// Mock do AsyncStorage
+// Mock AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn((key: 'ACCESS_TOKEN_KEY' | 'TOKEN_EXPIRATION_KEY') => {
     const store = {
@@ -25,13 +25,13 @@ describe('userService', () => {
   });
 
   describe('getUsers', () => {
-    it('deve retornar erro ao falhar ao carregar usuários', async () => {
+    it('should return error when failing to load users', async () => {
       const mockError = { response: { data: { message: 'Load Error' } } };
       (api.get as jest.Mock).mockRejectedValue(mockError);
 
       const result = await userService.getUsers();
       result.subscribe({
-        next: () => fail('Deveria ter falhado'),
+        next: () => fail('Should have failed'),
         error: (error) => {
           expect(error.message).toBe('Load Error');
         },
@@ -40,7 +40,7 @@ describe('userService', () => {
   });
 
   describe('postUser', () => {
-    it('deve retornar erro ao falhar ao criar usuário', async () => {
+    it('should return error when failing to create user', async () => {
       const mockError = { response: { data: { message: 'Create Error' } } };
       (api.post as jest.Mock).mockRejectedValue(mockError);
 
@@ -53,7 +53,7 @@ describe('userService', () => {
       } as UserModel);
 
       result.subscribe({
-        next: () => fail('Deveria ter falhado'),
+        next: () => fail('Should have failed'),
         error: (error) => {
           expect(error.message).toBe('Create Error');
         },
@@ -62,7 +62,7 @@ describe('userService', () => {
   });
 
   describe('putUser', () => {
-    it('deve retornar erro ao falhar ao atualizar usuário', async () => {
+    it('should return error when failing to update user', async () => {
       const mockError = { response: { data: { message: 'Update Error' } } };
       (api.put as jest.Mock).mockRejectedValue(mockError);
 
@@ -75,7 +75,7 @@ describe('userService', () => {
       } as UserModel);
 
       result.subscribe({
-        next: () => fail('Deveria ter falhado'),
+        next: () => fail('Should have failed'),
         error: (error) => {
           expect(error.message).toBe('Update Error');
         },
@@ -84,13 +84,13 @@ describe('userService', () => {
   });
 
   describe('deleteUser', () => {
-    it('deve retornar erro ao falhar ao excluir usuário', async () => {
+    it('should return error when failing to delete user', async () => {
       const mockError = new Error('Delete Error');
       (api.delete as jest.Mock).mockRejectedValue(mockError);
 
       const result = await userService.deleteUser('1');
       result.subscribe({
-        next: () => fail('Deveria ter falhado'),
+        next: () => fail('Should have failed'),
         error: (error) => {
           expect(error.message).toBe(
             'Failed to delete user. Please try again later.',

@@ -6,7 +6,7 @@ import { categoryService } from '../../../src/services/Category/CategoryService'
 jest.mock('../../../src/services/api');
 jest.mock('../../../src/services/Auth/TokenService');
 
-// Mock do AsyncStorage
+// Mock AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn((key: 'ACCESS_TOKEN_KEY' | 'TOKEN_EXPIRATION_KEY') => {
     const store = {
@@ -26,7 +26,7 @@ describe('categoryService', () => {
   });
 
   describe('getCategories', () => {
-    it('deve retornar uma lista de categorias', (done) => {
+    it('should return a list of categories', (done) => {
       const mockCategories = [{ _id: '1', name: 'Test Category' }];
       (api.get as jest.Mock).mockResolvedValue({ data: mockCategories });
 
@@ -40,12 +40,12 @@ describe('categoryService', () => {
       });
     });
 
-    it('deve retornar erro quando a API falhar', (done) => {
+    it('should return error when API fails', (done) => {
       const mockError = new Error('Failed to load categories');
       (api.get as jest.Mock).mockRejectedValue(mockError);
 
       categoryService.getCategories().subscribe({
-        next: () => done.fail('Deveria ter falhado'),
+        next: () => done.fail('Should have failed'),
         error: (error) => {
           expect(error.message).toBe(
             'Failed to load categories. Please try again later.',
@@ -57,7 +57,7 @@ describe('categoryService', () => {
   });
 
   describe('postCategory', () => {
-    it('deve retornar erro ao falhar ao criar categoria', async () => {
+    it('should return error when failing to create category', async () => {
       const mockError = { response: { data: { message: 'Create Error' } } };
       (api.post as jest.Mock).mockRejectedValue(mockError);
 
@@ -67,7 +67,7 @@ describe('categoryService', () => {
       } as CategoryModel);
 
       result.subscribe({
-        next: () => fail('Deveria ter falhado'),
+        next: () => fail('Should have failed'),
         error: (error) => {
           expect(error.message).toBe('Create Error');
         },
@@ -76,7 +76,7 @@ describe('categoryService', () => {
   });
 
   describe('putCategory', () => {
-    it('deve retornar erro ao falhar ao atualizar categoria', async () => {
+    it('should return error when failing to update category', async () => {
       const mockError = { response: { data: { message: 'Update Error' } } };
       (api.put as jest.Mock).mockRejectedValue(mockError);
 
@@ -86,7 +86,7 @@ describe('categoryService', () => {
       } as CategoryModel);
 
       result.subscribe({
-        next: () => fail('Deveria ter falhado'),
+        next: () => fail('Should have failed'),
         error: (error) => {
           expect(error.message).toBe('Update Error');
         },
@@ -95,13 +95,13 @@ describe('categoryService', () => {
   });
 
   describe('deleteCategory', () => {
-    it('deve retornar erro ao falhar ao excluir categoria', async () => {
+    it('should return error when failing to delete category', async () => {
       const mockError = new Error('Delete Error');
       (api.delete as jest.Mock).mockRejectedValue(mockError);
 
       const result = await categoryService.deleteCategory('1');
       result.subscribe({
-        next: () => fail('Deveria ter falhado'),
+        next: () => fail('Should have failed'),
         error: (error) => {
           expect(error.message).toBe(
             'Failed to delete category. Please try again later.',

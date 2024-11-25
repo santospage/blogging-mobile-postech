@@ -1,5 +1,4 @@
 import React from 'react';
-// eslint-disable-next-line max-len
 import {
   render,
   fireEvent,

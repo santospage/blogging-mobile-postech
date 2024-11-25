@@ -20,7 +20,7 @@ export default function ClassRoomList() {
         await classroomService.getClassesManagerial()
       ).subscribe({
         next: (data: ClassRoomModel[]) => setClasses(data),
-        error: (error: Error) => {
+        error: () => {
           Toast.show({
             type: 'error',
             text1: 'Failed to load classes',

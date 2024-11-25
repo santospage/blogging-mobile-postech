@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { fireEvent, render } from '@testing-library/react-native';
 import { Text, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 

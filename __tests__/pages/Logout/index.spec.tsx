@@ -37,7 +37,6 @@ describe('Logout Component', () => {
     const confirmButton = getByText('Confirm');
     fireEvent.press(confirmButton);
 
-    // Verifica se AsyncStorage foi chamado para limpar os dados
     expect(AsyncStorage.setItem).toHaveBeenCalledWith('ACCESS_TOKEN_KEY', '');
   });
 
@@ -49,7 +48,6 @@ describe('Logout Component', () => {
     const cancelButton = getByText('Cancel');
     fireEvent.press(cancelButton);
 
-    // Verifica se a navegação foi chamada
     expect(mockNavigate).toHaveBeenCalledWith('Home');
   });
 });

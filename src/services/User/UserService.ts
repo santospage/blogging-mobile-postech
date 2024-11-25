@@ -19,7 +19,6 @@ export const userService = {
     ).pipe(
       map((response) => response.data),
       catchError((error) => {
-        console.error('Failed to load users:', error.response || error);
         return throwError(
           () =>
             new Error(
@@ -44,7 +43,6 @@ export const userService = {
     ).pipe(
       map((response) => response.data),
       catchError((error) => {
-        console.error('Failed to create user:', error.response || error);
         return throwError(
           () =>
             new Error(
@@ -72,7 +70,6 @@ export const userService = {
         return updatedUser;
       }),
       catchError((error) => {
-        console.error('Failed to update user:', error.response || error);
         return throwError(
           () =>
             new Error(
@@ -98,8 +95,7 @@ export const userService = {
       map(() => {
         return;
       }),
-      catchError((error) => {
-        console.error('Failed to delete user:', error);
+      catchError(() => {
         return throwError(
           () => new Error('Failed to delete user. Please try again later.'),
         );

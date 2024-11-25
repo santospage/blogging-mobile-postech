@@ -1,7 +1,7 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
-import Login from '../../../src/pages/Login';
+import { render, fireEvent } from '@testing-library/react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import Login from '../../../src/pages/Login';
 import { LoginScreenNavigationProp } from '../../../src/interfaces/Login/Login';
 
 // Mock de AsyncStorage
@@ -14,11 +14,12 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 
 // Mock do authService
 jest.mock('../../../src/services/Auth/AuthService', () => ({
-  login: jest.fn(),
+  authService: {
+    login: jest.fn(),
+  },
 }));
 
 const mockNavigate = jest.fn();
-
 const mockNavigation: LoginScreenNavigationProp = {
   navigate: mockNavigate,
   dispatch: jest.fn(),
@@ -58,5 +59,18 @@ describe('Login', () => {
     expect(getByPlaceholderText('User')).toBeTruthy();
     expect(getByPlaceholderText('Password')).toBeTruthy();
     expect(getByText('Confirm')).toBeTruthy();
+  });
+
+  it('should update input fields when typing', () => {
+    const { getByPlaceholderText } = renderWithNavigation();
+
+    const userInput = getByPlaceholderText('User');
+    const passwordInput = getByPlaceholderText('Password');
+
+    fireEvent.changeText(userInput, 'testUser');
+    fireEvent.changeText(passwordInput, 'testPassword');
+
+    expect(userInput.props.value).toBe('testUser');
+    expect(passwordInput.props.value).toBe('testPassword');
   });
 });

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { tokenService } from '../../../src/services/Auth/TokenService';
 
-// Mockando o AsyncStorage
+// Mock AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () => ({
   setItem: jest.fn(),
   getItem: jest.fn(),
@@ -10,11 +10,11 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 
 describe('tokenService', () => {
   afterEach(() => {
-    jest.clearAllMocks(); // Limpa os mocks após cada teste
+    jest.clearAllMocks();
   });
 
   describe('save', () => {
-    it('deve salvar o token e a expiração no AsyncStorage', async () => {
+    it('should save the token and expiration in AsyncStorage', async () => {
       const accessToken = 'dummy-token';
       const mockedNow = 1732474917839;
       jest.spyOn(Date, 'now').mockReturnValue(mockedNow);
@@ -35,7 +35,7 @@ describe('tokenService', () => {
   });
 
   describe('get', () => {
-    it('deve obter o token corretamente', async () => {
+    it('should get the token correctly', async () => {
       const accessToken = 'dummy-token';
       (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(accessToken);
 
@@ -46,7 +46,7 @@ describe('tokenService', () => {
     });
 
     // eslint-disable-next-line max-len
-    it('deve retornar uma string vazia se houver erro ao obter o token', async () => {
+    it('should return an empty string if there is an error getting the token', async () => {
       (AsyncStorage.getItem as jest.Mock).mockRejectedValueOnce(
         new Error('Failed to get'),
       );
@@ -58,7 +58,7 @@ describe('tokenService', () => {
   });
 
   describe('delete', () => {
-    it('deve remover o token e a expiração do AsyncStorage', async () => {
+    it('should remove token and AsyncStorage expiration', async () => {
       await tokenService.delete();
 
       expect(AsyncStorage.removeItem).toHaveBeenCalledWith('ACCESS_TOKEN_KEY');
@@ -69,7 +69,7 @@ describe('tokenService', () => {
   });
 
   describe('isValid', () => {
-    it('deve retornar true se o token for válido', async () => {
+    it('should return true if the token is valid', async () => {
       const expirationTime = (Date.now() + 60 * 60 * 1000).toString();
       (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(expirationTime);
 
@@ -78,7 +78,7 @@ describe('tokenService', () => {
       expect(result).toBe(true);
     });
 
-    it('deve retornar false se o token estiver expirado', async () => {
+    it('should return false if the token is expired', async () => {
       const expirationTime = (Date.now() - 60 * 60 * 1000).toString();
       (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(expirationTime);
 
@@ -87,7 +87,7 @@ describe('tokenService', () => {
       expect(result).toBe(false);
     });
 
-    it('deve retornar false se não houver expiração armazenada', async () => {
+    it('should return false if there is no expiration stored', async () => {
       (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(null);
 
       const result = await tokenService.isValid();
