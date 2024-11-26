@@ -203,7 +203,7 @@ Para executar em ambiente de desenvolvimento:
 
 O comando `sudo docker-compose up` já fará o processo de subir o APP e instalar as dependências em modo de desenvolvimento.
 
-Inicialize o servidor com o comando `npx expo start`, após pressione a tecla `a` para abrir o emulador.
+Inicialize o servidor com o comando `npx expo start`, após, pressione a tecla `a` para abrir o emulador.
 
 > **IMPORTANTE:** Estes comandos também inicializarão o emulador, aguarde a finalização do processo.
 
