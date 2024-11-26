@@ -42,7 +42,7 @@ Antes de rodar este projeto, é essencial que o backend esteja instalado e confi
 A documentação completa sobre a instalação, configuração e execução do backend está disponível no repositório:
 https://github.com/santospage/blogging-express-postech
 
-> **IMPORTANTE:** Para garantir o funcionamento correto, é necessário instalar um emulador de dispositivo móvel, para mais informaçoes, consulte:
+> **IMPORTANTE:** Para garantir o funcionamento correto, é necessário instalar um emulador de dispositivo móvel, para mais informaçoes, procure por `Usando o Emulador` em:
 > https://www.alura.com.br/artigos/configurando-o-ambiente-react-native
 
 ## Instalação
@@ -197,15 +197,13 @@ Para executar em ambiente de desenvolvimento:
 
 - Faça o `fork` e `clone` deste repositório em seu computador;
 - Entre no diretório local onde o repositório foi clonado;
-- Utilize o comando `sudo docker-compose up` para "build" e subir o servidor local e expor a porta 8081 em `localhost`.
+- Utilize o comando `sudo docker-compose up` para "build" e subir o servidor local e expor a porta 8081 em `iplocal`.
 
 ## Como rodar o APP
 
 O comando `sudo docker-compose up` já fará o processo de subir o APP e instalar as dependências em modo de desenvolvimento.
 
-Inicialize o servidor do Expo:
-npx expo start
-Press a
+Inicialize o servidor com o comando `npx expo`, após pressione a tecla `a`
 
 > **IMPORTANTE:** Estes comandos também inicializarão o emulador, aguarde a finalização do processo.
 
