@@ -4,9 +4,34 @@
 
 ## Resumo do projeto
 
-Projeto de APP desenvolvido em React Native com Expo para um Blogging de Aulas, com sistema de cadastro e manutenção de usuários, categorias e aulas ministradas.
+Projeto de APP Mobile desenvolvido em React Native com Expo para um Blogging de Aulas, com sistema de cadastro e manutenção de usuários, categorias e aulas ministradas.
 
 ## Stack utilizada
+
+- `axios` v1.7.7
+- `expo` v51.0.39
+- `expo-font` v51.0.39
+- `expo-status-bar` v51.0.39
+- `expo-google-fonts/poppins` v0.2.3
+- `jest-expo` v51.0.4
+- `react` v18.2.0
+- `react-native` v0.74.5
+- `react-native-dotenv` v3.4.11
+- `react-native-gesture-handler` v2.16.1
+- `react-native-modal` v13.0.1
+- `react-native-reanimated` v3.10.1
+- `react-native-safe-area-context` v4.10.5
+- `react-native-screens` v3.31.1
+- `react-native-toast-message` v2.2.1
+- `react-native-async-storage/async-storage` v1.23.1
+- `react-native-picker/picker` v2.7.5
+- `react-navigation` v5.0.0
+- `react-navigation/bottom-tabs` v7.0.0
+- `react-navigation/drawer` v7.0.1
+- `react-navigation/native` v7.0.0
+- `react-navigation/stack` v7.0.0
+- `rxjs` v7.8.1
+- `styled-components` v6.1.13
 
 ## Pré-Requisitos
 
@@ -17,148 +42,151 @@ Antes de rodar este projeto, é essencial que o backend esteja instalado e confi
 A documentação completa sobre a instalação, configuração e execução do backend está disponível no repositório:
 https://github.com/santospage/blogging-express-postech
 
+> **IMPORTANTE:** Para garantir o funcionamento correto, é necessário instalar um emulador de dispositivo móvel, para mais informaçoes, consulte:
+> https://www.alura.com.br/artigos/configurando-o-ambiente-react-native
+
 ## Instalação
 
 Este projeto já conta com o código necessário para subir o APP em um servidor local:
 
 ```
+├── assets
 ├── .github
 │   └── workflows
 │       ├── pre-push.yaml
 │       └── unit-tests-pr.yaml
 ├── src
-│   ├── app
-│   │   ├── category
-│   │   │   ├── form
-│   │   │   │   └── [id]
-│   │   │   │       └── page.tsx
-│   │   │   ├── list
-│   │   │   │   └── page.tsx
-│   │   │   └── category.module.css
-│   │   ├── classroom
-│   │   │   ├── form
-│   │   │   │   └── [id]
-│   │   │   │       └── page.tsx
-│   │   │   ├── list
-│   │   │   │   └── page.tsx
-│   │   │   └── category.module.css
-│   │   ├── components
-│   │   │   ├── Categories
-│   │   │   │   ├── Classes.tsx
-│   │   │   │   ├── ClassRoom.tsx
-│   │   │   │   └── categories.module.css
-│   │   │   ├── Classes
-│   │   │   │   ├── Categories.tsx
-│   │   │   │   ├── Category.tsx
-│   │   │   │   └── classes.module.css
-│   │   ├── footer
-│   │   │   ├── page.tsx
-│   │   │   └── footer.module.css
-│   │   ├── header
-│   │   │   ├── page.tsx
-│   │   │   └── header.module.css
-│   │   ├── login
-│   │   │   ├── page.tsx
-│   │   │   └── login.module.css
-│   │   ├── logout
-│   │   │   ├── page.tsx
-│   │   │   └── logout.module.css
-│   │   ├── user
-│   │   │   ├── form
-│   │   │   │   └── [id]
-│   │   │   │       └── page.tsx
-│   │   │   ├── list
-│   │   │   │   └── page.tsx
-│   │   │   └── user.module.css
-│   │   ├── global.css
-│   │   ├── layout.tsx
-│   │   ├── not-found.module.css
-│   │   ├── not-found.tsx
-│   │   ├── page.module.css
-│   │   ├── page.tsx
-│   │   ├── context
-│   │   │   └── CategoryContext.tsx
-│   │   ├── infra
-│   │   │   └── HttpClient
-│   │   │       └── HttpClient.tsx
-│   │   ├── models
-│   │   │   ├── Categories
-│   │   │   │   └── Categories.ts
-│   │   │   ├── Classes
-│   │   │   │   └── Classes.ts
-│   │   │   ├── Login
-│   │   │   │   └── Login.ts
-│   │   │   └── Users
-│   │   │       └── Users.ts
-│   │   ├── services
-│   │   │   ├── Auth
-│   │   │   │   ├── AuthService.tsx
-│   │   │   │   └── TokenService.tsx
-│   │   │   ├── Categories
-│   │   │   │   └── CategoryService.tsx
-│   │   │   ├── Classes
-│   │   │   │   └── ClassRoomService.tsx
-│   │   │   └── Users
-│   │   │       └── UserService.tsx
-├── tests
-│   ├── app
-│   │   ├── category
-│   │   │   ├── form
-│   │   │   │   └── page.spec.tsx
-│   │   │   └── list
-│   │   │       └── page.spec.tsx
-│   │   ├── classroom
-│   │   │   ├── form
-│   │   │   │   └── page.spec.tsx
-│   │   │   └── list
-│   │   │       └── page.spec.tsx
-│   │   ├── footer
-│   │   │   └── page.spec.tsx
-│   │   ├── header
-│   │   │   └── page.spec.tsx
-│   │   ├── login
-│   │   │   └── page.spec.tsx
-│   │   ├── logout
-│   │   │   └── page.spec.tsx
-│   │   ├── user
-│   │   │   ├── form
-│   │   │   │   └── page.spec.tsx
-│   │   │   └── list
-│   │   │       └── page.spec.tsx
-│   │   ├── layout.spec.tsx
-│   │   ├── not-found.spec.tsx
-│   │   ├── page.spec.tsx
-│   │   ├── context
-│   │   │   └── CategoryContext.spec.tsx
-│   │   ├── services
-│   │   │   ├── Auth
-│   │   │   │   └── AuthService.spec.tsx
-│   │   │   ├── Categories
-│   │   │   │   └── CategoryService.spec.tsx
-│   │   │   ├── Classes
-│   │   │   │   └── ClassRoomService.spec.tsx
-│   │   │   └── Users
-│   │   │       └── UserService.spec.tsx
+│   ├── contexts
+│   │   └── AuthenticatorContext.tsx
+│   ├── interfaces
+│   │   ├── Authentication
+│   │   │   └── Authentication.ts
+│   │   ├── BasePage
+│   │   │   └── BasePage.ts
+│   │   ├── Category
+│   │   │   └── Category.ts
+│   │   ├── Classes
+│   │   │   ├── Classes.ts
+│   │   ├── Home
+│   │   │   └── Home.ts
+│   │   ├── Login
+│   │   │   └── Login.ts
+│   │   ├── User
+│   │   │   └── User.ts
+│   ├── pages
+│   │   ├── BasePage
+│   │   │   ├── index.tsx
+│   │   │   └── styles.ts
+│   │   ├── Category
+│   │   │   ├── index.tsx
+│   │   │   ├── styles.ts
+│   │   │   └── Form
+│   │   │       ├── index.tsx
+│   │   │       └── styles.ts
+│   │   ├── Classes
+│   │   │   ├── index.tsx
+│   │   │   ├── styles.ts
+│   │   │   └── Card
+│   │   │       ├── index.tsx
+│   │   │       └── styles.ts
+│   │   ├── ClassRoom
+│   │   │   ├── index.tsx
+│   │   │   ├── styles.ts
+│   │   │   ├── Form
+│   │   │   │   ├── index.tsx
+│   │   │   │   └── styles.ts
+│   │   │   └── List
+│   │   │       ├── index.tsx
+│   │   │       └── styles.ts
+│   │   ├── Home
+│   │   │   ├── index.tsx
+│   │   │   └── styles.ts
+│   │   ├── Login
+│   │   │   ├── index.tsx
+│   │   │   └── styles.ts
+│   │   ├── Logout
+│   │   │   ├── index.tsx
+│   │   │   └── styles.ts
+│   │   ├── User
+│   │   │   ├── index.tsx
+│   │   │   ├── styles.ts
+│   │   │   └── Form
+│   │   │       ├── index.tsx
+│   │   │       └── styles.ts
+│   ├── routes
+│   │   └── navigation.tsx
+│   ├── services
+│   │   ├── Auth
+│   │   │   ├── AuthService.ts
+│   │   │   └── TokenService.ts
+│   │   ├── Category
+│   │   │       └── CategoryService.ts
+│   │   ├── Classes
+│   │   │       └── ClassRoomService.ts
+│   │   ├── User
+│   │   │       └── UserService.ts
+│   │   └── api.ts
+│   └── react-native-dotenv.d.ts
 ├── .editorconfig
 ├── .env
 ├── .env_example
 ├── .gitignore
 ├── .prettierrc
+├── .prettierrc.js
+├── app.json
+├── App.tsx
+├── babel.config.js
 ├── docker-compose.yml
 ├── Dockerfile
-├── jest.config.js
-├── jest.setup.js
-├── next-env.d.ts
-├── next.config.mjs
+├── eslint.config.mjs
 ├── package-lock.json
 ├── package.json
-├── postcss.config.mjs
 ├── README.md
-├── tailwind.config.ts
-└── tsconfig.json
+├── tsconfig.json
+├── __tests__
+│   ├── contexts
+│   │   └── AuthenticatorContext.spec.tsx
+│   ├── pages
+│   │   ├── Category
+│   │   │   ├── Form
+│   │   │   │   └── index.spec.tsx
+│   │   │   └── index.spec.tsx
+│   │   ├── Classes
+│   │   │   ├── Form
+│   │   │   │   └── index.spec.tsx
+│   │   │   └── index.spec.tsx
+│   │   ├── ClassRoom
+│   │   │   ├── Form
+│   │   │   │   └── index.spec.tsx
+│   │   │   ├── List
+│   │   │   │   └── index.spec.tsx
+│   │   │   └── index.spec.tsx
+│   │   ├── Home
+│   │   │   └── index.spec.tsx
+│   │   ├── Login
+│   │   │   └── index.spec.tsx
+│   │   ├── Logout
+│   │   │   └── index.spec.tsx
+│   │   └── User
+│   │       ├── Form
+│   │       │   └── index.spec.tsx
+│   │       └── index.spec.tsx
+│   ├── routes
+│   │       └── navigation.spec.tsx
+│   └── services
+│       ├── Auth
+│       │   ├── AuthService.spec.ts
+│       │   └── TokenService.spec.ts
+│       ├── Category
+│       │   └── CategoryService.spec.ts
+│       ├── Classes
+│       │   └── ClassRoomService.spec.ts
+│       └── User
+│           └── UserService.spec.ts
+└──── app.spec.tsx
 ```
 
-### Instalação do projeto
+### Execução do projeto
 
 O projeto está pronto para ser executado em um ambiente Docker. Por este motivo, será necessária apenas a instalação do Docker, não sendo necessária a instalação manual do projeto via
 `npm install`.
@@ -173,15 +201,13 @@ Para executar em ambiente de desenvolvimento:
 
 ## Como rodar o APP
 
-O comando `sudo docker-compose up` já fará o processo de instalar e subir o APP em modo de desenvolvimento.
-
-> **IMPORTANTE:** Necessária a instalação de um emulador android para correto funcionamento, ver mais em:
-
-Instale as dependências do projeto:
-npm install
+O comando `sudo docker-compose up` já fará o processo de subir o APP e instalar as dependências em modo de desenvolvimento.
 
 Inicialize o servidor do Expo:
 npx expo start
+Press a
+
+> **IMPORTANTE:** Estes comandos também inicializarão o emulador, aguarde a finalização do processo.
 
 > **IMPORTANTE:** Este APP está programado para ser acessada a partir de `http://iplocal:8081`. Certifique-se de que não existem outros recursos ocupando a porta `8081` antes de subir o projeto.
 
@@ -190,33 +216,33 @@ npx expo start
 Este APP disponibiliza as seguintes funcionalidades a partir da URL\_ `iplocal:8081/blogging`:
 
 `/`
-`Home contendo a lista de aulas disponíveis e filtros`
+`Home contendo a opção de login e aulas disponíveis`
 
-`/classroom`
+`/Classes`
 `Exibe detalhes sobre a aula selecionada`
 
-`/login`
+`/Login`
 `Possibilita identificação do usuário através de user e password`
 
-`/logout`
+`/Logout`
 `Desconeta o usuário identificado na opção login`
 
-`/user/list`
+`/User/List`
 `Lista todos os usuários cadastrados para utilização do sistema`
 
-`/user/form`
+`/User/Form`
 `Possibilita a realização do CRUD de usuários no sistema`
 
-`/categories/list`
+`/Categories/List`
 `Lista todos as categorias cadastradas para classificação das aulas`
 
-`/categories/form`
+`/Categories/Form`
 `Possibilita a realização do CRUD de categorias no sistema`
 
-`/classes/list`
+`/Classes/List`
 `Lista todos as aulas cadastradas no sistema`
 
-`/classes/form`
+`/Classes/Form`
 `Possibilita a realização do CRUD de aulas no sistema`
 
 ## Observações
@@ -228,3 +254,15 @@ Usuário padrão pré-cadastrado:
 `Password: 123456`
 
 ## Telas
+
+![Welcome](https://drive.google.com/uc?export=view&id=1REmNr0Y3khBczXUpbYHeCRBAPnHEP4Ny)
+
+![Login](https://drive.google.com/uc?export=view&id=1BJSaEEAzNj1-EQk6mrTCJR2N7BPIcgfJ)
+
+![Classes](https://drive.google.com/uc?export=view&id=1OlgMODMHm0alLpukVB7F6acCGcWt0ZTp)
+
+![Card](https://drive.google.com/uc?export=view&id=1xHroamMAhuvhvt3DeS8hKAAC94R-EiDG)
+
+![List](https://drive.google.com/uc?export=view&id=1b0HZm10ZOzVG2PwHnAF_xgaAcRTmDsPZ)
+
+![Form](https://drive.google.com/uc?export=view&id=1VC5cozSFDp5epjbfgpmh4SKTYvJ03idL)
