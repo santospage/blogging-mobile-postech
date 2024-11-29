@@ -4,7 +4,7 @@ export type ClassRoomModel = {
   resume: string;
   detail?: string;
   updatedAt?: string;
-  category: {
+  category?: {
     name?: string;
   };
   user: {

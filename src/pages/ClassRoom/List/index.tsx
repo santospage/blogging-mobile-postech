@@ -151,7 +151,9 @@ export default function ClassRoomList() {
       <Text style={styles.classRoomText}>Title: {item.title}</Text>
       <Text style={styles.classRoomText}>Resume: {item.resume}</Text>
       <Text style={styles.classRoomText}>Detail: {item.detail}</Text>
-      <Text style={styles.classRoomText}>Category: {item.category.name}</Text>
+      <Text style={styles.classRoomText}>
+        Category: {item.category ? item.category.name : 'N/A'}
+      </Text>
       <Text style={styles.classRoomText}>User: {item.user.user}</Text>
       <Text style={styles.classRoomText}>
         Date:{' '}
