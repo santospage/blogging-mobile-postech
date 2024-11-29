@@ -18,35 +18,35 @@ export default function UserForm({ user, onSave, onClose }: UserFormProps) {
     setPassword(user?.password || '');
   }, [user]);
 
-  // Validations
-  if (!currentUser) {
-    Toast.show({
-      type: 'error',
-      text1: 'Erro',
-      text2: 'User is mandatory!',
-    });
-    return;
-  }
-
-  if (!fullName) {
-    Toast.show({
-      type: 'error',
-      text1: 'Erro',
-      text2: 'FullName is mandatory!',
-    });
-    return;
-  }
-
-  if (!password) {
-    Toast.show({
-      type: 'error',
-      text1: 'Erro',
-      text2: 'Password is mandatory!',
-    });
-    return;
-  }
-
   const handleSave = () => {
+    // Validations
+    if (!currentUser) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro',
+        text2: 'User is mandatory!',
+      });
+      return;
+    }
+
+    if (!fullName) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro',
+        text2: 'FullName is mandatory!',
+      });
+      return;
+    }
+
+    if (!password) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro',
+        text2: 'Password is mandatory!',
+      });
+      return;
+    }
+
     if (user) {
       onSave({ ...user, user: currentUser, fullName, email, password });
     } else {

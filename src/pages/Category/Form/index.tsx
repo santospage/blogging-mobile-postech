@@ -16,17 +16,16 @@ export default function CategoryForm({
     setName(category?.name || '');
   }, [category]);
 
-  // Validation
-  if (!name) {
-    Toast.show({
-      type: 'error',
-      text1: 'Erro',
-      text2: 'Name is mandatory!',
-    });
-    return;
-  }
-
   const handleSave = () => {
+    if (!name) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro',
+        text2: 'Name is mandatory!',
+      });
+      return;
+    }
+
     if (category) {
       onSave({ ...category, name });
     } else {
