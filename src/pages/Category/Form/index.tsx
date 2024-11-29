@@ -17,20 +17,20 @@ export default function CategoryForm({
   }, [category]);
 
   const handleSave = () => {
-    if (!name) {
+    if (!name.trim()) {
       Toast.show({
         type: 'error',
-        text1: 'Erro',
+        text1: 'Error',
         text2: 'Name is mandatory!',
       });
       return;
     }
 
-    if (category) {
-      onSave({ ...category, name });
-    } else {
-      onSave({ name });
-    }
+    const newCategory = category
+      ? { ...category, name: name.trim() }
+      : { name: name.trim() };
+
+    onSave(newCategory);
   };
 
   return (

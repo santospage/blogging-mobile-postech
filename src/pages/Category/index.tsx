@@ -33,10 +33,7 @@ export default function CategoryList() {
   const handleAddCategory = async (newCategory: Omit<CategoryModel, '_id'>) => {
     (await categoryService.postCategory(newCategory)).subscribe({
       next: (savedCategory) => {
-        setCategories((prevCategories) => {
-          return [...prevCategories, savedCategory];
-        });
-
+        setCategories((prevCategories) => [...prevCategories, savedCategory]);
         closeModal();
         Toast.show({
           type: 'success',
@@ -64,7 +61,6 @@ export default function CategoryList() {
               : cat,
           ),
         );
-
         closeModal();
         Toast.show({
           type: 'success',
@@ -132,7 +128,9 @@ export default function CategoryList() {
 
   const renderItem = ({ item }: { item: CategoryModel }) => (
     <View style={styles.categoryItem}>
-      <Text style={styles.categoryText}>Name: {item.name}</Text>
+      <Text style={styles.categoryText}>
+        Name: {item.name || 'No name available'}
+      </Text>
       <View style={styles.actions}>
         <TouchableOpacity
           style={styles.actionButton}
@@ -142,7 +140,7 @@ export default function CategoryList() {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.actionButton}
-          onPress={() => confirmDeleteCategory(item._id!)}
+          onPress={() => confirmDeleteCategory(item._id || '')}
         >
           <Text style={styles.actionButtonText}>Delete</Text>
         </TouchableOpacity>
@@ -154,7 +152,7 @@ export default function CategoryList() {
     <View style={styles.container}>
       <FlatList
         data={categories}
-        keyExtractor={(item) => item._id!}
+        keyExtractor={(item) => item._id || Math.random().toString()}
         renderItem={renderItem}
       />
       <TouchableOpacity style={styles.addButton} onPress={() => openModal()}>
